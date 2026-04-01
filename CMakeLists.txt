@@ -18,7 +18,9 @@ find_package(Qt6 COMPONENTS
 
 add_executable(MusicPlayer src/main.cpp
         src/mainwindow.h
-        src/mainwindow.cpp)
+        src/mainwindow.cpp
+        src/lefttoolbar.cpp
+        src/lefttoolbar.h)
 target_link_libraries(MusicPlayer
         Qt::Core
         Qt::Gui
