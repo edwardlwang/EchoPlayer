@@ -8,9 +8,8 @@
 
 #include "lefttoolbar.h"
 #include <QMainWindow>
-#include <QToolBar>
-#include <QPushButton>
-#include <vector>
+#include <QWidget>
+#include <QHBoxLayout>
 
 class MainWindow : public QMainWindow {
     // Q_OBJECT 是 Qt 框架的核心灵魂宏，它是 Qt 实现信号与槽（Signals & Slots）、元对象系统（Meta-Object System）等核心特性的必要前提。
@@ -25,7 +24,12 @@ public:
 private slots:
 
 private:
-    LeftToolBar *leftToolBar;
+    QWidget *centralWidget;
+    QHBoxLayout *centralWidgetLayout;
+    QWidget *leftNavigationBar;
+    QVBoxLayout *leftNavigationBarLayout;
+    QWidget *rightContent;
+    QHBoxLayout *rightContentLayout;
 };
 
 #endif //MUSICPLAYER_MAINWINDOW_H
