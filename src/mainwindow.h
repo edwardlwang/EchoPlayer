@@ -6,9 +6,9 @@
 #define MUSICPLAYER_MAINWINDOW_H
 
 
-#include "lefttoolbar.h"
 #include <QMainWindow>
 #include <QWidget>
+#include <QVBoxLayout>
 #include <QHBoxLayout>
 
 class MainWindow : public QMainWindow {
@@ -25,9 +25,9 @@ private slots:
 
 private:
     QWidget *centralWidget;
-    QHBoxLayout *centralWidgetLayout;
-    QWidget *leftNavigationBar;
-    QVBoxLayout *leftNavigationBarLayout;
+    QVBoxLayout *centralWidgetLayout;
+    QWidget *contentWidget;
+    QHBoxLayout *contentLayout;
     QWidget *rightContent;
     QHBoxLayout *rightContentLayout;
 };

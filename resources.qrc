@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file alias="EchoNote_icon.png">res/icons/EchoNote_icon.png</file>
+        <file alias="arrow_left_icon.svg">res/icons/arrow_left_icon.svg</file>
+        <file alias="arrow_right_icon.svg">res/icons/arrow_right_icon.svg</file>
+        <file alias="list_icon.svg">res/icons/list_icon.svg</file>
+        <file alias="pause_icon.svg">res/icons/pause_icon.svg</file>
+        <file alias="play_icon.svg">res/icons/play_icon.svg</file>
+        <file alias="volume_icon.svg">res/icons/volume_icon.svg</file>
+    </qresource>
+</RCC>
+

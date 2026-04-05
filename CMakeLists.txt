@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 4.1)
-project(MusicPlayer)
+cmake_minimum_required(VERSION 3.16)
+project(EchoNote)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_AUTOMOC ON)
@@ -14,18 +14,25 @@ find_package(Qt6 COMPONENTS
         Widgets
         Multimedia
         MultimediaWidgets
+        Svg
         REQUIRED)
 
-add_executable(MusicPlayer src/main.cpp
+add_executable(EchoNote src/main.cpp
         src/mainwindow.h
         src/mainwindow.cpp
+        src/leftnavigationbar.cpp
+        src/leftnavigationbar.h
+        src/playercontrolbar.cpp
+        src/playercontrolbar.h
+        resources.qrc
 )
-target_link_libraries(MusicPlayer
+target_link_libraries(EchoNote
         Qt::Core
         Qt::Gui
         Qt::Widgets
         Qt::Multimedia
         Qt::MultimediaWidgets
+        Qt::Svg
 )
 
 if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
@@ -49,7 +56,18 @@ if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
                 "${QT_INSTALL_PATH}/plugins/platforms/qwindows${DEBUG_SUFFIX}.dll"
                 "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/platforms/")
     endif ()
-    foreach (QT_LIB Core Gui Widgets Multimedia MultimediaWidgets)
+
+    if (EXISTS "${QT_INSTALL_PATH}/plugins/iconengines/qsvgicon${DEBUG_SUFFIX}.dll")
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E make_directory
+                "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/iconengines/")
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy
+                "${QT_INSTALL_PATH}/plugins/iconengines/qsvgicon${DEBUG_SUFFIX}.dll"
+                "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/iconengines/")
+    endif ()
+
+    foreach (QT_LIB Core Gui Widgets Multimedia MultimediaWidgets Svg)
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy
                 "${QT_INSTALL_PATH}/bin/Qt6${QT_LIB}${DEBUG_SUFFIX}.dll"

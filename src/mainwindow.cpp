@@ -3,12 +3,12 @@
 //
 
 #include "mainwindow.h"
-#include <iostream>
-
+#include "playercontrolbar.h"
+#include "leftnavigationbar.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent) {
-    std::cout << "MainWindow的构造函数\n";
+    qDebug() << "MainWindow构造完成";
 
     // 设置主窗口属性
     this->resize(960, 540);
@@ -19,30 +19,40 @@ MainWindow::MainWindow(QWidget *parent)
     centralWidget = new QWidget(this);
     this->setCentralWidget(centralWidget);
 
-    // 为中心控件添加水平布局
-    centralWidgetLayout = new QHBoxLayout(centralWidget);
+    // 为中心控件添加垂直布局：上方内容区，下方底部状态栏
+    centralWidgetLayout = new QVBoxLayout(centralWidget);
     centralWidgetLayout->setContentsMargins(0, 0, 0, 0);
     centralWidgetLayout->setSpacing(0);
 
+    // 上方内容区容器
+    contentWidget = new QWidget(centralWidget);
+    contentLayout = new QHBoxLayout(contentWidget);
+    contentLayout->setContentsMargins(0, 0, 0, 0);
+    contentLayout->setSpacing(0);
+
     // 左侧导航栏
-    leftNavigationBar = new QWidget(centralWidget);
+    const auto leftNavigationBar = new LeftNavigationBar(contentWidget);
+    contentLayout->addWidget(leftNavigationBar);
 
-    leftNavigationBar->setObjectName("leftNavigationBar");
-    leftNavigationBar->setFixedWidth(108);
-
-    leftNavigationBarLayout = new QVBoxLayout(leftNavigationBar);
-    leftNavigationBarLayout->setContentsMargins(0, 0, 0, 0);
-    leftNavigationBarLayout->setSpacing(0);
-    rightContent = new QWidget(centralWidget);
+    // 右侧内容区域
+    rightContent = new QWidget(contentWidget);
+    contentLayout->addWidget(rightContent, 1);
     rightContent->setObjectName("rightContent");
 
     rightContentLayout = new QHBoxLayout(rightContent);
     rightContentLayout->setContentsMargins(0, 0, 0, 0);
     rightContentLayout->setSpacing(0);
+
+    // 上方内容区占据剩余空间
+    centralWidgetLayout->addWidget(contentWidget, 1);
+
+    // 底部状态栏固定在窗口底部
+    auto bottomStatusBar = new PlayerControlBar(centralWidget);
+    centralWidgetLayout->addWidget(bottomStatusBar);
 }
 
 MainWindow::~MainWindow() {
-    std::cout << "MainWindow的析构函数\n";
+    qDebug() << "MainWindow析构完成！";
 }
 
 
