@@ -2,14 +2,15 @@
 // Created by edward on 2026/4/4.
 //
 
-#include "playercontrolbar.h"
+#include "../h/playercontrolbar.h"
 
 PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     qDebug() << "PlayerControlBar构造完成";
 
-    this->setObjectName("playercontrolbar");
+    this->setObjectName("playerControlBar");
     this->setFixedHeight(108);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    this->setAttribute(Qt::WA_StyledBackground, true);
 
     playerControlBarLayout = new QHBoxLayout(this);
     playerControlBarLayout->setContentsMargins(0, 0, 0, 0);
@@ -29,7 +30,7 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     prevBtn->setFixedSize(64, 64);
     prevBtn->setObjectName("prevBtn");
     prevBtn->setFlat(true);
-    prevBtn->setIcon(QIcon("../res/icons/arrow_left_icon.svg"));
+    prevBtn->setIcon(QIcon(":/icons/arrow_left_icon.svg"));
     playerControlBarLayout->addWidget(prevBtn);
 
     playPauseBtn = new QPushButton(this);
@@ -37,14 +38,14 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     playPauseBtn->setObjectName("playPauseBtn");
     // playPauseBtn->setIconSize(QSize(32, 32));
     playPauseBtn->setFlat(true);
-    playPauseBtn->setIcon(QIcon("../res/icons/play_icon.svg"));
+    playPauseBtn->setIcon(QIcon(":/icons/play_icon.svg"));
     playerControlBarLayout->addWidget(playPauseBtn);
 
     nextBtn = new QPushButton(this);
     nextBtn->setFixedSize(64, 64);
     nextBtn->setObjectName("nextBtn");
     nextBtn->setFlat(true);
-    nextBtn->setIcon(QIcon("../res/icons/arrow_right_icon.svg"));
+    nextBtn->setIcon(QIcon(":/icons/arrow_right_icon.svg"));
     playerControlBarLayout->addWidget(nextBtn);
 
     playListBtn = new QPushButton(this);
@@ -64,5 +65,5 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
 
 
 PlayerControlBar::~PlayerControlBar() {
-    qDebug() << "PlayerControlBar析构完成！";
+    qDebug() << "PlayerControlBar析构完成";
 }

@@ -10,6 +10,8 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include "leftnavigationbar.h"
+#include "playercontrolbar.h"
 
 class MainWindow : public QMainWindow {
     // Q_OBJECT 是 Qt 框架的核心灵魂宏，它是 Qt 实现信号与槽（Signals & Slots）、元对象系统（Meta-Object System）等核心特性的必要前提。
@@ -24,12 +26,15 @@ public:
 private slots:
 
 private:
-    QWidget *centralWidget;
-    QVBoxLayout *centralWidgetLayout;
-    QWidget *contentWidget;
-    QHBoxLayout *contentLayout;
-    QWidget *rightContent;
-    QHBoxLayout *rightContentLayout;
+    QWidget *centralWidget; // 主窗口中心容器（setCentralWidget）
+    QVBoxLayout *centralWidgetLayout; // 中心容器的垂直布局：上内容区、下控制栏
+    QWidget *contentWidget; // 上方内容区容器
+    QHBoxLayout *contentLayout; // 内容区水平布局：左导航 + 右侧内容
+
+    LeftNavigationBar *leftNavigationBar; // 左侧导航栏
+    QWidget *rightContent; // 右侧主内容容器
+    QHBoxLayout *rightContentLayout; // 右侧内容布局
+    PlayerControlBar *playerControlBar; // 底部播放器控制栏
 };
 
 #endif //MUSICPLAYER_MAINWINDOW_H

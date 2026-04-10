@@ -17,14 +17,16 @@ find_package(Qt6 COMPONENTS
         Svg
         REQUIRED)
 
-add_executable(EchoNote src/main.cpp
-        src/mainwindow.h
-        src/mainwindow.cpp
-        src/leftnavigationbar.cpp
-        src/leftnavigationbar.h
-        src/playercontrolbar.cpp
-        src/playercontrolbar.h
+add_executable(EchoNote src/cpp/main.cpp
+        src/h/mainwindow.h
+        src/cpp/mainwindow.cpp
+        src/cpp/leftnavigationbar.cpp
+        src/h/leftnavigationbar.h
+        src/cpp/playercontrolbar.cpp
+        src/h/playercontrolbar.h
         resources.qrc
+        src/cpp/rightcontent.cpp
+        src/h/rightcontent.h
 )
 target_link_libraries(EchoNote
         Qt::Core

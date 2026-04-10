@@ -1,0 +1,28 @@
+#leftNavigationBar {
+    background-color: blue;
+}
+#leftNavigationBar QPushButton {
+    background-color: #f7f7f7;
+    border: none;
+    color: #333333;
+}
+#leftNavigationBar QPushButton:hover {
+    background-color: #eaeaea;
+}
+#leftNavigationBar QPushButton:checked {
+    background-color: #e0e0e0;
+    color: #000000;
+}
+#leftNavigationBar QFrame{
+    background-color: #cccccc;
+}
+
+#rightContent {
+    background-color: green;
+}
+
+#playerControlBar {
+    background-color: pink;
+    border-top: 1px solid #333333;
+}
+

@@ -2,7 +2,7 @@
 // Created by edward on 2026/4/4.
 //
 
-#include "leftnavigationbar.h"
+#include "../h/leftnavigationbar.h"
 #include <QFrame>
 
 LeftNavigationBar::LeftNavigationBar(QWidget *parent) : QWidget(parent) {
@@ -10,7 +10,8 @@ LeftNavigationBar::LeftNavigationBar(QWidget *parent) : QWidget(parent) {
 
     this->setObjectName("leftNavigationBar");
     this->setFixedWidth(108);
-    this->setParent(parent);
+    this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    this->setAttribute(Qt::WA_StyledBackground, true);
 
     leftNavigationBarLayout = new QVBoxLayout(this);
     leftNavigationBarLayout->setContentsMargins(0, 0, 0, 0);
@@ -34,28 +35,9 @@ LeftNavigationBar::LeftNavigationBar(QWidget *parent) : QWidget(parent) {
         auto *frame = new QFrame(this);
         frame->setFrameShape(QFrame::HLine);
         frame->setFixedHeight(1);
-        frame->setStyleSheet("background-color: #cccccc;");
         leftNavigationBarLayout->addWidget(frame);
     }
     leftNavigationBarLayout->addStretch(1);
-
-    this->setStyleSheet(R"(
-        #leftNavigationBar {
-            background-color: #f7f7f7;
-        }
-        #leftNavigationBar QPushButton {
-            background-color: #f7f7f7;
-            border: none;
-            color: #333333;
-        }
-        #leftNavigationBar QPushButton:hover {
-            background-color: #eaeaea;
-        }
-        #leftNavigationBar QPushButton:checked {
-            background-color: #e0e0e0;
-            color: #000000;
-        }
-    )");
 }
 
 LeftNavigationBar::~LeftNavigationBar() {

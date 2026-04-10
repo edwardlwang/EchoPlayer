@@ -8,5 +8,9 @@
         <file alias="play_icon.svg">res/icons/play_icon.svg</file>
         <file alias="volume_icon.svg">res/icons/volume_icon.svg</file>
     </qresource>
+
+    <qresource prefix="/styles">
+        <file alias="app.qss">src/styles/app.qss</file>
+    </qresource>
 </RCC>
 
