@@ -29,37 +29,37 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     prevBtn = new QPushButton(this);
     prevBtn->setFixedSize(64, 64);
     prevBtn->setObjectName("prevBtn");
-    prevBtn->setFlat(true);
-    prevBtn->setIcon(QIcon(":/icons/arrow_left_icon.svg"));
+    // prevBtn->setFlat(true);
+    prevBtn->setIcon(QIcon(":/icons/previous.svg"));
     playerControlBarLayout->addWidget(prevBtn);
 
     playPauseBtn = new QPushButton(this);
     playPauseBtn->setFixedSize(64, 64);
     playPauseBtn->setObjectName("playPauseBtn");
     // playPauseBtn->setIconSize(QSize(32, 32));
-    playPauseBtn->setFlat(true);
-    playPauseBtn->setIcon(QIcon(":/icons/play_icon.svg"));
+    // playPauseBtn->setFlat(true);
+    playPauseBtn->setIcon(QIcon(":/icons/play.svg"));
     playerControlBarLayout->addWidget(playPauseBtn);
 
     nextBtn = new QPushButton(this);
     nextBtn->setFixedSize(64, 64);
     nextBtn->setObjectName("nextBtn");
-    nextBtn->setFlat(true);
-    nextBtn->setIcon(QIcon(":/icons/arrow_right_icon.svg"));
+    // nextBtn->setFlat(true);
+    nextBtn->setIcon(QIcon(":/icons/next.svg"));
     playerControlBarLayout->addWidget(nextBtn);
 
     playListBtn = new QPushButton(this);
     playListBtn->setFixedSize(64, 64);
     playListBtn->setObjectName("playListBtn");
-    playListBtn->setFlat(true);
-    playListBtn->setIcon(QIcon(":/icons/list_icon.svg"));
+    // playListBtn->setFlat(true);
+    playListBtn->setIcon(QIcon(":/icons/playlist.svg"));
     playerControlBarLayout->addWidget(playListBtn);
 
     volumeBtn = new QPushButton(this);
     volumeBtn->setFixedSize(64, 64);
     volumeBtn->setObjectName("volumeBtn");
-    volumeBtn->setFlat(true);
-    volumeBtn->setIcon(QIcon(":/icons/volume_icon.svg"));
+    // volumeBtn->setFlat(true);
+    volumeBtn->setIcon(QIcon(":/icons/volume-high.svg"));
     playerControlBarLayout->addWidget(volumeBtn);
 }
 

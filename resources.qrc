@@ -1,12 +1,46 @@
 <RCC>
     <qresource prefix="/icons">
-        <file alias="EchoNote_icon.png">res/icons/EchoNote_icon.png</file>
-        <file alias="arrow_left_icon.svg">res/icons/arrow_left_icon.svg</file>
-        <file alias="arrow_right_icon.svg">res/icons/arrow_right_icon.svg</file>
-        <file alias="list_icon.svg">res/icons/list_icon.svg</file>
-        <file alias="pause_icon.svg">res/icons/pause_icon.svg</file>
-        <file alias="play_icon.svg">res/icons/play_icon.svg</file>
-        <file alias="volume_icon.svg">res/icons/volume_icon.svg</file>
+        <!-- core playback -->
+        <file alias="play.svg">res/icons/vidstack/play.svg</file>
+        <file alias="pause.svg">res/icons/vidstack/pause.svg</file>
+        <file alias="stop.svg">res/icons/vidstack/stop.svg</file>
+        <file alias="next.svg">res/icons/vidstack/next.svg</file>
+        <file alias="previous.svg">res/icons/vidstack/previous.svg</file>
+        <file alias="replay.svg">res/icons/vidstack/replay.svg</file>
+
+        <!-- seeking -->
+        <file alias="seek-backward.svg">res/icons/vidstack/seek-backward.svg</file>
+        <file alias="seek-forward.svg">res/icons/vidstack/seek-forward.svg</file>
+        <file alias="seek-backward-10.svg">res/icons/vidstack/seek-backward-10.svg</file>
+        <file alias="seek-forward-10.svg">res/icons/vidstack/seek-forward-10.svg</file>
+        <file alias="seek-backward-15.svg">res/icons/vidstack/seek-backward-15.svg</file>
+        <file alias="seek-forward-15.svg">res/icons/vidstack/seek-forward-15.svg</file>
+        <file alias="seek-backward-30.svg">res/icons/vidstack/seek-backward-30.svg</file>
+        <file alias="seek-forward-30.svg">res/icons/vidstack/seek-forward-30.svg</file>
+        <file alias="fast-backward.svg">res/icons/vidstack/fast-backward.svg</file>
+        <file alias="fast-forward.svg">res/icons/vidstack/fast-forward.svg</file>
+
+        <!-- queue / playlist -->
+        <file alias="playlist.svg">res/icons/vidstack/playlist.svg</file>
+        <file alias="add-playlist.svg">res/icons/vidstack/add-playlist.svg</file>
+        <file alias="queue-list.svg">res/icons/vidstack/queue-list.svg</file>
+
+        <!-- volume / audio -->
+        <file alias="volume-high.svg">res/icons/vidstack/volume-high.svg</file>
+        <file alias="volume-low.svg">res/icons/vidstack/volume-low.svg</file>
+        <file alias="mute.svg">res/icons/vidstack/mute.svg</file>
+        <file alias="music.svg">res/icons/vidstack/music.svg</file>
+        <file alias="music-off.svg">res/icons/vidstack/music-off.svg</file>
+        <file alias="microphone.svg">res/icons/vidstack/microphone.svg</file>
+
+        <!-- playback modes -->
+        <file alias="repeat.svg">res/icons/vidstack/repeat.svg</file>
+        <file alias="repeat-on.svg">res/icons/vidstack/repeat-on.svg</file>
+        <file alias="repeat-square.svg">res/icons/vidstack/repeat-square.svg</file>
+        <file alias="repeat-square-on.svg">res/icons/vidstack/repeat-square-on.svg</file>
+        <file alias="shuffle.svg">res/icons/vidstack/shuffle.svg</file>
+        <file alias="shuffle-on.svg">res/icons/vidstack/shuffle-on.svg</file>
+        <file alias="playback-speed-circle.svg">res/icons/vidstack/playback-speed-circle.svg</file>
     </qresource>
 
     <qresource prefix="/styles">

@@ -33,7 +33,6 @@ private:
 
     LeftNavigationBar *leftNavigationBar; // 左侧导航栏
     QWidget *rightContent; // 右侧主内容容器
-    QHBoxLayout *rightContentLayout; // 右侧内容布局
     PlayerControlBar *playerControlBar; // 底部播放器控制栏
 };
 

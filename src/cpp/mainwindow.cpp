@@ -3,7 +3,6 @@
 //
 
 #include "../h/mainwindow.h"
-
 #include "../h/rightcontent.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -13,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     // 设置主窗口属性
     this->resize(960, 540);
     this->setWindowTitle("EchoNote");
-    this->setWindowIcon(QIcon(":/icons/EchoNote_icon.png"));
+    this->setWindowIcon(QIcon(":/icons/music.svg"));
 
     // 为主窗口添加中心控件，所有子控件都添加在中心控件里
     centralWidget = new QWidget(this);
