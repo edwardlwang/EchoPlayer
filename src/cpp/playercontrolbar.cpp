@@ -31,12 +31,12 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     songCoverLabel = new QLabel("封面", this);
     songCoverLabel->setFixedSize(48, 48);
     songCoverLabel->setObjectName("songCoverLabel");
-    songInfoAreaLayout->addWidget(songCoverLabel);
+    songInfoAreaLayout->addWidget(songCoverLabel,0,Qt::AlignLeft);
 
     songInfoLabel = new QLabel("信息", this);
     songInfoLabel->setFixedSize(48, 48);
     songInfoLabel->setObjectName("songInfoLabel");
-    songInfoAreaLayout->addWidget(songInfoLabel);
+    songInfoAreaLayout->addWidget(songInfoLabel,0,Qt::AlignLeft);
 
     playOrderBtn = new QPushButton(this);
     playOrderBtn->setFixedSize(48, 48);
@@ -84,7 +84,7 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     volumeBtn->setIconSize(QSize(32, 32));
     volumeBtn->setFlat(true);
     volumeBtn->setIcon(QIcon(":/icons/volume-high.svg"));
-    controlAreaLayout->addWidget(volumeBtn);
+    controlAreaLayout->addWidget(volumeBtn,0,Qt::AlignRight);
 }
 
 

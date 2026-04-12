@@ -12,6 +12,7 @@
 #include <QHBoxLayout>
 #include "leftnavigationbar.h"
 #include "playercontrolbar.h"
+#include "rightcontent.h"
 
 class MainWindow : public QMainWindow {
     // Q_OBJECT 是 Qt 框架的核心灵魂宏，它是 Qt 实现信号与槽（Signals & Slots）、元对象系统（Meta-Object System）等核心特性的必要前提。
@@ -32,7 +33,7 @@ private:
     QHBoxLayout *contentLayout; // 内容区水平布局：左导航 + 右侧内容
 
     LeftNavigationBar *leftNavigationBar; // 左侧导航栏
-    QWidget *rightContent; // 右侧主内容容器
+    RightContent *rightContent; // 右侧主内容容器
     PlayerControlBar *playerControlBar; // 底部播放器控制栏
 };
 

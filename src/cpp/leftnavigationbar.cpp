@@ -17,21 +17,26 @@ LeftNavigationBar::LeftNavigationBar(QWidget *parent) : QWidget(parent) {
     leftNavigationBarLayout->setContentsMargins(0, 0, 0, 0);
     leftNavigationBarLayout->setSpacing(0);
 
-    texts = {
-        "歌曲", "专辑", "艺术家",
-        "歌单", "设置"
+    const QVector<BtnInfo> btnInfos = {
+        {"songs", "歌曲",   ":/icons/microphone.svg"},
+        {"albums","专辑",   ":/icons/disc.svg"},
+        {"artists","艺术家",":/icons/user.svg"},
+        {"playlists","歌单",":/icons/queue-list.svg"},
+        {"settings","设置", ":/icons/settings.svg"}
     };
 
-    for (const QString &text: texts) {
-        auto *btn = new QPushButton(text, this);
-        btn->setObjectName(text);
+    for (const BtnInfo &item: btnInfos) {
+        auto *btn = new QPushButton(item.text, this);
+        btn->setObjectName(item.key);
         btn->setCheckable(true);
-        // btn->setFlat(true);
+        btn->setFlat(true);
         btn->setFixedSize(108, 60);
         btn->setIconSize(QSize(32, 32));
+        btn->setIcon(QIcon(item.iconPath));
+        btn->setCursor(Qt::PointingHandCursor);
         leftNavigationBarButtons.push_back(btn);
         leftNavigationBarLayout->addWidget(btn);
-        connect(btn, &QPushButton::clicked, this, [=] { qDebug() << "点击了：" << text; });
+        connect(btn, &QPushButton::clicked, this, [=] { qDebug() << "点击了：" << item.text; });
     }
     leftNavigationBarLayout->addStretch(1);
 }

@@ -5,6 +5,8 @@
     background-color: #f7f7f7;
     border: none;
     color: #333333;
+    text-align: left;
+    padding: 12px 16px 12px 16px;
 }
 #leftNavigationBar QPushButton:hover {
     background-color: #eaeaea;
@@ -23,7 +25,7 @@
     border-top: 1px solid #333333;
 }
 
-#playerControlBar playPauseBtn:checked {
+#playerControlBar #playPauseBtn:checked {
     background-color: #f7f7f7;
     border: none;
     color: #333333;

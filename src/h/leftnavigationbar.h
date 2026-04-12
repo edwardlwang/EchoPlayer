@@ -20,8 +20,13 @@ public:
 
 private:
     QVBoxLayout *leftNavigationBarLayout;
-    QStringList texts;
     std::vector<QPushButton *> leftNavigationBarButtons;
+
+    struct BtnInfo {
+        QString key;
+        QString text;
+        QString iconPath;
+    };
 };
 
 

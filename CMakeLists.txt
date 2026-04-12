@@ -30,6 +30,10 @@ add_executable(EchoNote src/cpp/main.cpp
         resources.qrc
         src/cpp/rightcontent.cpp
         src/h/rightcontent.h
+        src/cpp/songwidget.cpp
+        src/h/songwidget.h
+        src/cpp/albumwidget.cpp
+        src/h/albumwidget.h
 )
 target_link_libraries(EchoNote
         Qt::Core
