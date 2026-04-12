@@ -26,16 +26,12 @@ LeftNavigationBar::LeftNavigationBar(QWidget *parent) : QWidget(parent) {
         auto *btn = new QPushButton(text, this);
         btn->setObjectName(text);
         btn->setCheckable(true);
-        btn->setFlat(true);
+        // btn->setFlat(true);
         btn->setFixedSize(108, 60);
         btn->setIconSize(QSize(32, 32));
         leftNavigationBarButtons.push_back(btn);
         leftNavigationBarLayout->addWidget(btn);
         connect(btn, &QPushButton::clicked, this, [=] { qDebug() << "点击了：" << text; });
-        auto *frame = new QFrame(this);
-        frame->setFrameShape(QFrame::HLine);
-        frame->setFixedHeight(1);
-        leftNavigationBarLayout->addWidget(frame);
     }
     leftNavigationBarLayout->addStretch(1);
 }

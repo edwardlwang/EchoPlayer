@@ -16,51 +16,75 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     playerControlBarLayout->setContentsMargins(0, 0, 0, 0);
     playerControlBarLayout->setSpacing(8);
 
+    songInfoArea=new QWidget(this);
+    playerControlBarLayout->addWidget(songInfoArea);
+    songInfoAreaLayout=new QHBoxLayout(songInfoArea);
+
+    playArea=new QWidget(this);
+    playerControlBarLayout->addWidget(playArea);
+    playAreaLayout=new QHBoxLayout(playArea);
+
+    controlArea=new QWidget(this);
+    playerControlBarLayout->addWidget(controlArea);
+    controlAreaLayout=new QHBoxLayout(controlArea);
+
     songCoverLabel = new QLabel("封面", this);
-    songCoverLabel->setFixedSize(64, 64);
+    songCoverLabel->setFixedSize(48, 48);
     songCoverLabel->setObjectName("songCoverLabel");
-    playerControlBarLayout->addWidget(songCoverLabel);
+    songInfoAreaLayout->addWidget(songCoverLabel);
 
     songInfoLabel = new QLabel("信息", this);
-    songInfoLabel->setFixedSize(64, 64);
+    songInfoLabel->setFixedSize(48, 48);
     songInfoLabel->setObjectName("songInfoLabel");
-    playerControlBarLayout->addWidget(songInfoLabel);
+    songInfoAreaLayout->addWidget(songInfoLabel);
+
+    playOrderBtn = new QPushButton(this);
+    playOrderBtn->setFixedSize(48, 48);
+    playOrderBtn->setObjectName("playOrderBtn");
+    playOrderBtn->setIconSize(QSize(32,32));
+    playOrderBtn->setFlat(true);
+    playOrderBtn->setIcon(QIcon(":/icons/repeat.svg"));
+    playAreaLayout->addWidget(playOrderBtn);
 
     prevBtn = new QPushButton(this);
-    prevBtn->setFixedSize(64, 64);
+    prevBtn->setFixedSize(48, 48);
     prevBtn->setObjectName("prevBtn");
-    // prevBtn->setFlat(true);
+    prevBtn->setIconSize(QSize(32, 32));
+    prevBtn->setFlat(true);
     prevBtn->setIcon(QIcon(":/icons/previous.svg"));
-    playerControlBarLayout->addWidget(prevBtn);
+    playAreaLayout->addWidget(prevBtn);
 
     playPauseBtn = new QPushButton(this);
-    playPauseBtn->setFixedSize(64, 64);
+    playPauseBtn->setFixedSize(48, 48);
     playPauseBtn->setObjectName("playPauseBtn");
-    // playPauseBtn->setIconSize(QSize(32, 32));
-    // playPauseBtn->setFlat(true);
+    playPauseBtn->setIconSize(QSize(32, 32));
+    playPauseBtn->setFlat(true);
     playPauseBtn->setIcon(QIcon(":/icons/play.svg"));
-    playerControlBarLayout->addWidget(playPauseBtn);
+   playAreaLayout->addWidget(playPauseBtn);
 
     nextBtn = new QPushButton(this);
-    nextBtn->setFixedSize(64, 64);
+    nextBtn->setFixedSize(48, 48);
     nextBtn->setObjectName("nextBtn");
-    // nextBtn->setFlat(true);
+    nextBtn->setIconSize(QSize(32, 32));
+    nextBtn->setFlat(true);
     nextBtn->setIcon(QIcon(":/icons/next.svg"));
-    playerControlBarLayout->addWidget(nextBtn);
+    playAreaLayout->addWidget(nextBtn);
 
     playListBtn = new QPushButton(this);
-    playListBtn->setFixedSize(64, 64);
+    playListBtn->setFixedSize(48, 48);
     playListBtn->setObjectName("playListBtn");
-    // playListBtn->setFlat(true);
+    playListBtn->setIconSize(QSize(32, 32));
+    playListBtn->setFlat(true);
     playListBtn->setIcon(QIcon(":/icons/playlist.svg"));
-    playerControlBarLayout->addWidget(playListBtn);
+    playAreaLayout->addWidget(playListBtn);
 
     volumeBtn = new QPushButton(this);
-    volumeBtn->setFixedSize(64, 64);
+    volumeBtn->setFixedSize(48, 48);
     volumeBtn->setObjectName("volumeBtn");
-    // volumeBtn->setFlat(true);
+    volumeBtn->setIconSize(QSize(32, 32));
+    volumeBtn->setFlat(true);
     volumeBtn->setIcon(QIcon(":/icons/volume-high.svg"));
-    playerControlBarLayout->addWidget(volumeBtn);
+    controlAreaLayout->addWidget(volumeBtn);
 }
 
 

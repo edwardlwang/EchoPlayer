@@ -7,6 +7,7 @@
         <file alias="next.svg">res/icons/vidstack/next.svg</file>
         <file alias="previous.svg">res/icons/vidstack/previous.svg</file>
         <file alias="replay.svg">res/icons/vidstack/replay.svg</file>
+        <file alias="repeat.svg">res/icons/vidstack/repeat.svg</file>
 
         <!-- seeking -->
         <file alias="seek-backward.svg">res/icons/vidstack/seek-backward.svg</file>

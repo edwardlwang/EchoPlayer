@@ -13,9 +13,6 @@
     background-color: #e0e0e0;
     color: #000000;
 }
-#leftNavigationBar QFrame{
-    background-color: #cccccc;
-}
 
 #rightContent {
     background-color: green;
@@ -24,5 +21,11 @@
 #playerControlBar {
     background-color: pink;
     border-top: 1px solid #333333;
+}
+
+#playerControlBar playPauseBtn:checked {
+    background-color: #f7f7f7;
+    border: none;
+    color: #333333;
 }
 

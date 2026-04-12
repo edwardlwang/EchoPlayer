@@ -20,12 +20,22 @@ public:
 
 private:
     QHBoxLayout *playerControlBarLayout;
+
+    QWidget *songInfoArea;
+    QHBoxLayout *songInfoAreaLayout;
     QLabel *songCoverLabel;
     QLabel *songInfoLabel;
+
+    QWidget *playArea;
+    QHBoxLayout *playAreaLayout;
+    QPushButton *playOrderBtn;
     QPushButton *prevBtn;
     QPushButton *playPauseBtn;
     QPushButton *nextBtn;
     QPushButton *playListBtn;
+
+    QWidget *controlArea;
+    QHBoxLayout *controlAreaLayout;
     QPushButton *volumeBtn;
 };
 
