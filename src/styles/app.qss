@@ -16,7 +16,7 @@
     color: #000000;
 }
 
-#rightContent {
+#rightcontent {
     background-color: green;
 }
 
@@ -25,17 +25,29 @@
     border-top: 1px solid #333333;
 }
 
-#playerControlBar #playPauseBtn:checked {
+#playerControlBar #playpausebtn:checked {
     background-color: #f7f7f7;
     border: none;
     color: #333333;
 }
 
-#songwidget {
+#songpage {
     background-color: purple;
 }
 
-#albumwidget {
+#albumpage {
     background-color: orange;
+}
+
+#artistpage {
+    background-color: cyan;
+}
+
+#playlistpage {
+    background-color: magenta;
+}
+
+#settingpage {
+    background-color: yellow;
 }
 

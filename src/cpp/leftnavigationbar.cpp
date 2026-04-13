@@ -3,7 +3,6 @@
 //
 
 #include "../h/leftnavigationbar.h"
-#include <QFrame>
 
 LeftNavigationBar::LeftNavigationBar(QWidget *parent) : QWidget(parent) {
     qDebug() << "LeftNavigationBar构造完成";
@@ -17,16 +16,20 @@ LeftNavigationBar::LeftNavigationBar(QWidget *parent) : QWidget(parent) {
     leftNavigationBarLayout->setContentsMargins(0, 0, 0, 0);
     leftNavigationBarLayout->setSpacing(0);
 
+    left_navigation_bar_button_group = new QButtonGroup(this);
+    left_navigation_bar_button_group->setExclusive(true);
+
     const QVector<BtnInfo> btnInfos = {
-        {"songs", "歌曲",   ":/icons/microphone.svg"},
-        {"albums","专辑",   ":/icons/disc.svg"},
-        {"artists","艺术家",":/icons/user.svg"},
-        {"playlists","歌单",":/icons/queue-list.svg"},
-        {"settings","设置", ":/icons/settings.svg"}
+        {"songs", "歌曲", ":/icons/microphone.svg"},
+        {"albums", "专辑", ":/icons/disc.svg"},
+        {"artists", "艺术家", ":/icons/user.svg"},
+        {"playlists", "歌单", ":/icons/queue-list.svg"},
+        {"settings", "设置", ":/icons/settings.svg"}
     };
 
     for (const BtnInfo &item: btnInfos) {
         auto *btn = new QPushButton(item.text, this);
+
         btn->setObjectName(item.key);
         btn->setCheckable(true);
         btn->setFlat(true);
@@ -34,11 +37,17 @@ LeftNavigationBar::LeftNavigationBar(QWidget *parent) : QWidget(parent) {
         btn->setIconSize(QSize(32, 32));
         btn->setIcon(QIcon(item.iconPath));
         btn->setCursor(Qt::PointingHandCursor);
+        if (item.key == "songs") {
+            btn->setChecked(true);
+        }
+
         leftNavigationBarButtons.push_back(btn);
         leftNavigationBarLayout->addWidget(btn);
+        left_navigation_bar_button_group->addButton(btn);
+
         connect(btn, &QPushButton::clicked, this, [=] {
-            qDebug() << "点击了：" << item.text;
-            emit navigationButtonClicked(item.key);
+            qDebug() << "点击了：" << btn->objectName();
+            emit navigationButtonClicked(btn->objectName());
         });
     }
     leftNavigationBarLayout->addStretch(1);

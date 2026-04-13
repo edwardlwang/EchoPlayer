@@ -37,6 +37,13 @@ private:
     QWidget *controlArea;
     QHBoxLayout *controlAreaLayout;
     QPushButton *volumeBtn;
+
+    struct BtnInfo {
+        QString key;
+        QString iconPath;
+    };
+
+    QPushButton *createButton(const BtnInfo &btn_info, QWidget *parent = nullptr);
 };
 
 

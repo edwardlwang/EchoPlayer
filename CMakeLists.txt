@@ -7,8 +7,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 set(CMAKE_PREFIX_PATH
-                "C:/Users/edward/AppData/Local/Programs/Qt/6.8.3/mingw_64"
-#        "C:/ProgramData/Qt/6.8.3/mingw_64"
+#                "C:/Users/edward/AppData/Local/Programs/Qt/6.8.3/mingw_64"
+        "C:/ProgramData/Qt/6.8.3/mingw_64"
 )
 
 find_package(Qt6 COMPONENTS
@@ -30,10 +30,16 @@ add_executable(EchoNote src/cpp/main.cpp
         resources.qrc
         src/cpp/rightcontent.cpp
         src/h/rightcontent.h
-        src/cpp/songwidget.cpp
-        src/h/songwidget.h
-        src/cpp/albumwidget.cpp
-        src/h/albumwidget.h
+        src/cpp/songpage.cpp
+        src/h/songpage.h
+        src/cpp/albumpage.cpp
+        src/h/albumpage.h
+        src/cpp/settingpage.cpp
+        src/h/settingpage.h
+        src/cpp/artistpage.cpp
+        src/h/artistpage.h
+        src/cpp/playlistpage.cpp
+        src/h/playlistpage.h
 )
 target_link_libraries(EchoNote
         Qt::Core

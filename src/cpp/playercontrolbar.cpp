@@ -8,7 +8,7 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     qDebug() << "PlayerControlBar构造完成";
 
     this->setObjectName("playerControlBar");
-    this->setFixedHeight(108);
+    this->setFixedHeight(81);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     this->setAttribute(Qt::WA_StyledBackground, true);
 
@@ -16,78 +16,67 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     playerControlBarLayout->setContentsMargins(0, 0, 0, 0);
     playerControlBarLayout->setSpacing(8);
 
-    songInfoArea=new QWidget(this);
+    songInfoArea = new QWidget(this);
     playerControlBarLayout->addWidget(songInfoArea);
-    songInfoAreaLayout=new QHBoxLayout(songInfoArea);
+    songInfoAreaLayout = new QHBoxLayout(songInfoArea);
 
-    playArea=new QWidget(this);
+    playArea = new QWidget(this);
     playerControlBarLayout->addWidget(playArea);
-    playAreaLayout=new QHBoxLayout(playArea);
+    playAreaLayout = new QHBoxLayout(playArea);
 
-    controlArea=new QWidget(this);
+    controlArea = new QWidget(this);
     playerControlBarLayout->addWidget(controlArea);
-    controlAreaLayout=new QHBoxLayout(controlArea);
+    controlAreaLayout = new QHBoxLayout(controlArea);
 
     songCoverLabel = new QLabel("封面", this);
     songCoverLabel->setFixedSize(48, 48);
     songCoverLabel->setObjectName("songCoverLabel");
-    songInfoAreaLayout->addWidget(songCoverLabel,0,Qt::AlignLeft);
+    songInfoAreaLayout->addWidget(songCoverLabel, 0, Qt::AlignLeft);
 
     songInfoLabel = new QLabel("信息", this);
     songInfoLabel->setFixedSize(48, 48);
     songInfoLabel->setObjectName("songInfoLabel");
-    songInfoAreaLayout->addWidget(songInfoLabel,0,Qt::AlignLeft);
+    songInfoAreaLayout->addWidget(songInfoLabel, 0, Qt::AlignLeft);
 
-    playOrderBtn = new QPushButton(this);
-    playOrderBtn->setFixedSize(48, 48);
-    playOrderBtn->setObjectName("playOrderBtn");
-    playOrderBtn->setIconSize(QSize(32,32));
-    playOrderBtn->setFlat(true);
-    playOrderBtn->setIcon(QIcon(":/icons/repeat.svg"));
+    const QVector<BtnInfo> btn_infos = {
+        {"playorderbtn", ":/icons/repeat.svg"},
+        {"prevbtn", ":/icons/previous.svg"},
+        {"playpausebtn", ":/icons/play.svg"},
+        {"nextbtn", ":/icons/next.svg"},
+        {"playListbtn", ":/icons/playlist.svg"},
+        {"volumeBtn", ":/icons/volume-high.svg"}
+    };
+
+    playOrderBtn = createButton(btn_infos[0], this);
     playAreaLayout->addWidget(playOrderBtn);
-
-    prevBtn = new QPushButton(this);
-    prevBtn->setFixedSize(48, 48);
-    prevBtn->setObjectName("prevBtn");
-    prevBtn->setIconSize(QSize(32, 32));
-    prevBtn->setFlat(true);
-    prevBtn->setIcon(QIcon(":/icons/previous.svg"));
+    prevBtn = createButton(btn_infos[1], this);
     playAreaLayout->addWidget(prevBtn);
 
-    playPauseBtn = new QPushButton(this);
-    playPauseBtn->setFixedSize(48, 48);
-    playPauseBtn->setObjectName("playPauseBtn");
-    playPauseBtn->setIconSize(QSize(32, 32));
-    playPauseBtn->setFlat(true);
-    playPauseBtn->setIcon(QIcon(":/icons/play.svg"));
-   playAreaLayout->addWidget(playPauseBtn);
+    playPauseBtn = createButton(btn_infos[2], this);
+    playAreaLayout->addWidget(playPauseBtn);
 
-    nextBtn = new QPushButton(this);
-    nextBtn->setFixedSize(48, 48);
-    nextBtn->setObjectName("nextBtn");
-    nextBtn->setIconSize(QSize(32, 32));
-    nextBtn->setFlat(true);
-    nextBtn->setIcon(QIcon(":/icons/next.svg"));
+
+    nextBtn = createButton(btn_infos[3], this);
     playAreaLayout->addWidget(nextBtn);
 
-    playListBtn = new QPushButton(this);
-    playListBtn->setFixedSize(48, 48);
-    playListBtn->setObjectName("playListBtn");
-    playListBtn->setIconSize(QSize(32, 32));
-    playListBtn->setFlat(true);
-    playListBtn->setIcon(QIcon(":/icons/playlist.svg"));
+    playListBtn = createButton(btn_infos[4], this);
     playAreaLayout->addWidget(playListBtn);
 
-    volumeBtn = new QPushButton(this);
-    volumeBtn->setFixedSize(48, 48);
-    volumeBtn->setObjectName("volumeBtn");
-    volumeBtn->setIconSize(QSize(32, 32));
-    volumeBtn->setFlat(true);
-    volumeBtn->setIcon(QIcon(":/icons/volume-high.svg"));
-    controlAreaLayout->addWidget(volumeBtn,0,Qt::AlignRight);
+    volumeBtn = createButton(btn_infos[5], this);
+    controlAreaLayout->addWidget(volumeBtn, 0, Qt::AlignRight);
 }
-
 
 PlayerControlBar::~PlayerControlBar() {
     qDebug() << "PlayerControlBar析构完成";
+}
+
+QPushButton *PlayerControlBar::createButton(const BtnInfo &item, QWidget *parent) {
+    auto *btn = new QPushButton(parent);
+    btn->setFixedSize(48, 48);
+    btn->setObjectName(item.key);
+    btn->setIconSize(QSize(32, 32));
+    btn->setFlat(true);
+    btn->setIcon(QIcon(item.iconPath));
+    btn->setCursor(Qt::PointingHandCursor);
+    return btn;
 }

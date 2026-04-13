@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QStringList>
+#include <QButtonGroup>
 
 class LeftNavigationBar : public QWidget {
     Q_OBJECT
@@ -24,6 +25,7 @@ signals:
 private:
     QVBoxLayout *leftNavigationBarLayout;
     std::vector<QPushButton *> leftNavigationBarButtons;
+    QButtonGroup *left_navigation_bar_button_group;
 
     struct BtnInfo {
         QString key;

@@ -6,11 +6,14 @@
 
 RightContent::RightContent(QWidget *parent) : QStackedWidget(parent) {
     qDebug() << "RightContent构造完成";
-    this->setObjectName("rightContent");
+    this->setObjectName("rightcontent");
     this->setAttribute(Qt::WA_StyledBackground, true);
 
-    this->addWidget(new SongWidget(this));
-    this->addWidget(new AlbumWidget(this));
+    pageIndexMap.insert("songs", this->addWidget(new SongPage(this)));
+    pageIndexMap.insert("albums", this->addWidget(new AlbumPage(this)));
+    pageIndexMap.insert("artists", this->addWidget(new ArtistPage(this)));
+    pageIndexMap.insert("playlists", this->addWidget(new PlaylistPage(this)));
+    pageIndexMap.insert("settings", this->addWidget(new SettingPage(this)));
 }
 
 RightContent::~RightContent() {
@@ -18,11 +21,9 @@ RightContent::~RightContent() {
 }
 
 void RightContent::showPage(const QString &key) {
-    if (key == "songs") {
-        this->setCurrentIndex(0);
-    } else if (key == "albums") {
-        this->setCurrentIndex(1);
-    } else {
+    if (!pageIndexMap.contains(key)) {
         qDebug() << "未知页面：" << key;
+        return;
     }
+    setCurrentIndex(pageIndexMap.value(key));
 }
