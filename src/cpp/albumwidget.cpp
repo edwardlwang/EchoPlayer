@@ -6,7 +6,7 @@
 
 AlbumWidget::AlbumWidget(QWidget *parent) {
     qDebug() << "AlbumWidget构造完成";
-    this->setObjectName("albumWidget");
+    this->setObjectName("albumwidget");
     this->setAttribute(Qt::WA_StyledBackground, true);
 }
 

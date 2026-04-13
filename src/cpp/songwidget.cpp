@@ -6,7 +6,7 @@
 
 SongWidget::SongWidget(QWidget *parent) {
     qDebug() << "SongWidget构造完成";
-    this->setObjectName("songWidget");
+    this->setObjectName("songwidget");
     this->setAttribute(Qt::WA_StyledBackground, true);
 }
 

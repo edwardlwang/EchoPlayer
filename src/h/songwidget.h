@@ -11,7 +11,7 @@ class SongWidget : public QWidget {
     Q_OBJECT
     public:
     SongWidget(QWidget* parent);
-    ~SongWidget();
+    ~SongWidget() override;
 private:
 };
 

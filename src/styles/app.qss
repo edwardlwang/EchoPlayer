@@ -31,3 +31,11 @@
     color: #333333;
 }
 
+#songwidget {
+    background-color: purple;
+}
+
+#albumwidget {
+    background-color: orange;
+}
+

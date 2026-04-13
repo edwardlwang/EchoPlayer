@@ -36,7 +36,10 @@ LeftNavigationBar::LeftNavigationBar(QWidget *parent) : QWidget(parent) {
         btn->setCursor(Qt::PointingHandCursor);
         leftNavigationBarButtons.push_back(btn);
         leftNavigationBarLayout->addWidget(btn);
-        connect(btn, &QPushButton::clicked, this, [=] { qDebug() << "点击了：" << item.text; });
+        connect(btn, &QPushButton::clicked, this, [=] {
+            qDebug() << "点击了：" << item.text;
+            emit navigationButtonClicked(item.key);
+        });
     }
     leftNavigationBarLayout->addStretch(1);
 }

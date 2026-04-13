@@ -18,6 +18,9 @@ public:
 
     ~LeftNavigationBar() override;
 
+signals:
+    void navigationButtonClicked(const QString &key);
+
 private:
     QVBoxLayout *leftNavigationBarLayout;
     std::vector<QPushButton *> leftNavigationBarButtons;

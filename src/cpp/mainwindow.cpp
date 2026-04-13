@@ -37,12 +37,17 @@ MainWindow::MainWindow(QWidget *parent)
     rightContent = new RightContent(contentWidget);
     contentLayout->addWidget(rightContent, 1);
 
+    connect(leftNavigationBar, &LeftNavigationBar::navigationButtonClicked,
+        rightContent, &RightContent::showPage);
+
     // 上方内容区占据剩余空间
     centralWidgetLayout->addWidget(contentWidget, 1);
 
     // 底部状态栏固定在窗口底部
     playerControlBar = new PlayerControlBar(centralWidget);
     centralWidgetLayout->addWidget(playerControlBar);
+
+
 }
 
 MainWindow::~MainWindow() {

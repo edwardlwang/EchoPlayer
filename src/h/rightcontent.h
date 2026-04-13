@@ -6,14 +6,18 @@
 #define ECHONOTE_RIGHTCONTENT_H
 
 #include <QStackedWidget>
+#include "songwidget.h"
+#include "albumwidget.h"
 
 class RightContent : public QStackedWidget {
     Q_OBJECT
 
 public:
-    RightContent(QWidget *parent = nullptr);
+    explicit RightContent(QWidget *parent = nullptr);
 
-    ~RightContent();
+    ~RightContent() override;
+public slots:
+    void showPage(const QString &key);
 
 private:
 };
