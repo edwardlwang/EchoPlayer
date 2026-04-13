@@ -13,7 +13,7 @@ class ArtistPage : public QWidget {
 public:
     explicit ArtistPage(QWidget *parent = nullptr);
 
-    ~ArtistPage();
+    ~ArtistPage() override;
 };
 
 

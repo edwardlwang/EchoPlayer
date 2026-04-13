@@ -2,22 +2,22 @@
 // Created by edward on 2026/4/4.
 //
 
-#include "../h/leftnavigationbar.h"
+#include "../h/navigationbar.h"
 
-LeftNavigationBar::LeftNavigationBar(QWidget *parent) : QWidget(parent) {
-    qDebug() << "LeftNavigationBar构造完成";
+NavigationBar::NavigationBar(QWidget *parent) : QWidget(parent) {
+    qDebug() << "NavigationBar构造完成";
 
-    this->setObjectName("leftNavigationBar");
+    this->setObjectName("navigationbar");
     this->setFixedWidth(108);
     this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
     this->setAttribute(Qt::WA_StyledBackground, true);
 
-    leftNavigationBarLayout = new QVBoxLayout(this);
-    leftNavigationBarLayout->setContentsMargins(0, 0, 0, 0);
-    leftNavigationBarLayout->setSpacing(0);
+    m_navigation_bar_layout = new QVBoxLayout(this);
+    m_navigation_bar_layout->setContentsMargins(0, 0, 0, 0);
+    m_navigation_bar_layout->setSpacing(0);
 
-    left_navigation_bar_button_group = new QButtonGroup(this);
-    left_navigation_bar_button_group->setExclusive(true);
+    m_navigation_bar_button_group = new QButtonGroup(this);
+    m_navigation_bar_button_group->setExclusive(true);
 
     const QVector<BtnInfo> btnInfos = {
         {"songs", "歌曲", ":/icons/microphone.svg"},
@@ -41,18 +41,18 @@ LeftNavigationBar::LeftNavigationBar(QWidget *parent) : QWidget(parent) {
             btn->setChecked(true);
         }
 
-        leftNavigationBarButtons.push_back(btn);
-        leftNavigationBarLayout->addWidget(btn);
-        left_navigation_bar_button_group->addButton(btn);
+        m_navigation_bar_buttons.push_back(btn);
+        m_navigation_bar_layout->addWidget(btn);
+        m_navigation_bar_button_group->addButton(btn);
 
         connect(btn, &QPushButton::clicked, this, [=] {
             qDebug() << "点击了：" << btn->objectName();
             emit navigationButtonClicked(btn->objectName());
         });
     }
-    leftNavigationBarLayout->addStretch(1);
+    m_navigation_bar_layout->addStretch(1);
 }
 
-LeftNavigationBar::~LeftNavigationBar() {
-    qDebug() << "LeftNavigationBar析构完成";
+NavigationBar::~NavigationBar() {
+    qDebug() << "NavigationBar析构完成";
 }

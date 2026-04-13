@@ -1,31 +1,31 @@
-#leftNavigationBar {
+#navigationbar {
     background-color: blue;
 }
-#leftNavigationBar QPushButton {
+#navigationbar QPushButton {
     background-color: #f7f7f7;
     border: none;
     color: #333333;
     text-align: left;
     padding: 12px 16px 12px 16px;
 }
-#leftNavigationBar QPushButton:hover {
+#navigationbar QPushButton:hover {
     background-color: #eaeaea;
 }
-#leftNavigationBar QPushButton:checked {
+#navigationbar QPushButton:checked {
     background-color: #e0e0e0;
     color: #000000;
 }
 
-#rightcontent {
+#contentarea {
     background-color: green;
 }
 
-#playerControlBar {
+#playercontrolbar {
     background-color: pink;
     border-top: 1px solid #333333;
 }
 
-#playerControlBar #playpausebtn:checked {
+#playercontrolbar #playpausebtn:checked {
     background-color: #f7f7f7;
     border: none;
     color: #333333;

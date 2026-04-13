@@ -11,7 +11,7 @@ class SongPage : public QWidget {
     Q_OBJECT
 
 public:
-    SongPage(QWidget *parent = nullptr);
+    explicit SongPage(QWidget *parent = nullptr);
 
     ~SongPage() override;
 

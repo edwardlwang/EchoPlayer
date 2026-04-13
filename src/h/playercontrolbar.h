@@ -14,36 +14,36 @@ class PlayerControlBar : public QWidget {
     Q_OBJECT
 
 public:
-    PlayerControlBar(QWidget *parent = nullptr);
+    explicit PlayerControlBar(QWidget *parent = nullptr);
 
     ~PlayerControlBar() override;
 
 private:
-    QHBoxLayout *playerControlBarLayout;
+    QHBoxLayout *m_player_control_bar_layout;
 
-    QWidget *songInfoArea;
-    QHBoxLayout *songInfoAreaLayout;
-    QLabel *songCoverLabel;
-    QLabel *songInfoLabel;
+    QWidget *m_song_info_area;
+    QHBoxLayout *m_song_info_area_layout;
+    QLabel *m_song_cover_label;
+    QLabel *m_song_info_label;
 
-    QWidget *playArea;
-    QHBoxLayout *playAreaLayout;
-    QPushButton *playOrderBtn;
-    QPushButton *prevBtn;
-    QPushButton *playPauseBtn;
-    QPushButton *nextBtn;
-    QPushButton *playListBtn;
+    QWidget *m_play_area;
+    QHBoxLayout *m_play_area_layout;
+    QPushButton *m_play_order_btn;
+    QPushButton *m_prev_btn;
+    QPushButton *m_play_pause_btn;
+    QPushButton *m_next_btn;
+    QPushButton *m_play_list_btn;
 
-    QWidget *controlArea;
-    QHBoxLayout *controlAreaLayout;
-    QPushButton *volumeBtn;
+    QWidget *m_control_area;
+    QHBoxLayout *m_control_area_layout;
+    QPushButton *m_volume_btn;
 
     struct BtnInfo {
         QString key;
         QString iconPath;
     };
 
-    QPushButton *createButton(const BtnInfo &btn_info, QWidget *parent = nullptr);
+    static QPushButton *createButton(const BtnInfo &btn_info, QWidget *parent = nullptr);
 };
 
 

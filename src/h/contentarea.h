@@ -2,8 +2,8 @@
 // Created by edward on 2026/4/10.
 //
 
-#ifndef ECHONOTE_RIGHTCONTENT_H
-#define ECHONOTE_RIGHTCONTENT_H
+#ifndef ECHONOTE_CONTENTAREA_H
+#define ECHONOTE_CONTENTAREA_H
 
 #include <QStackedWidget>
 #include <QHash>
@@ -13,20 +13,20 @@
 #include "playlistpage.h"
 #include "settingpage.h"
 
-class RightContent : public QStackedWidget {
+class ContentArea : public QStackedWidget {
     Q_OBJECT
 
 public:
-    explicit RightContent(QWidget *parent = nullptr);
+    explicit ContentArea(QWidget *parent = nullptr);
 
-    ~RightContent() override;
+    ~ContentArea() override;
 
 public slots:
     void showPage(const QString &key);
 
 private:
-    QHash<QString, int> pageIndexMap;
+    QHash<QString, int> m_page_index_map;
 };
 
 
-#endif //ECHONOTE_RIGHTCONTENT_H
+#endif //ECHONOTE_CONTENTAREA_H

@@ -7,8 +7,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 set(CMAKE_PREFIX_PATH
-#                "C:/Users/edward/AppData/Local/Programs/Qt/6.8.3/mingw_64"
-        "C:/ProgramData/Qt/6.8.3/mingw_64"
+                "C:/Users/edward/AppData/Local/Programs/Qt/6.8.3/mingw_64"
+#        "C:/ProgramData/Qt/6.8.3/mingw_64"
 )
 
 find_package(Qt6 COMPONENTS
@@ -23,13 +23,13 @@ find_package(Qt6 COMPONENTS
 add_executable(EchoNote src/cpp/main.cpp
         src/h/mainwindow.h
         src/cpp/mainwindow.cpp
-        src/cpp/leftnavigationbar.cpp
-        src/h/leftnavigationbar.h
+        src/cpp/navigationbar.cpp
+        src/h/navigationbar.h
         src/cpp/playercontrolbar.cpp
         src/h/playercontrolbar.h
         resources.qrc
-        src/cpp/rightcontent.cpp
-        src/h/rightcontent.h
+        src/cpp/contentarea.cpp
+        src/h/contentarea.h
         src/cpp/songpage.cpp
         src/h/songpage.h
         src/cpp/albumpage.cpp
