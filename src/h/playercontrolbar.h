@@ -7,7 +7,7 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QWidget>
-#include<QLabel>
+#include <QLabel>
 
 
 class PlayerControlBar : public QWidget {

@@ -8,7 +8,6 @@
 #include <vector>
 #include <QPushButton>
 #include <QVBoxLayout>
-#include <QStringList>
 #include <QButtonGroup>
 
 class NavigationBar : public QWidget {

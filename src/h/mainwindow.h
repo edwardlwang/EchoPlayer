@@ -8,8 +8,6 @@
 
 #include <QMainWindow>
 #include <QWidget>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
 #include "navigationbar.h"
 #include "playercontrolbar.h"
 #include "contentarea.h"

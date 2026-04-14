@@ -5,7 +5,9 @@
 #ifndef ECHONOTE_SONGPAGE_H
 #define ECHONOTE_SONGPAGE_H
 
-#include <QWidget>
+#include <QVBoxLayout>
+#include <QTableWidget>
+
 
 class SongPage : public QWidget {
     Q_OBJECT
@@ -15,7 +17,11 @@ public:
 
     ~SongPage() override;
 
+    void addSong(const QString &title, const QString &artist, const QString &album, const int &duration_sec);
+
 private:
+    QVBoxLayout *m_main_layout;
+    QTableWidget *m_song_table;
 };
 
 
