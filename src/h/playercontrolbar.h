@@ -9,6 +9,8 @@
 #include <QWidget>
 #include <QLabel>
 
+#include "commonstruct.h"
+
 
 class PlayerControlBar : public QWidget {
     Q_OBJECT
@@ -38,10 +40,6 @@ private:
     QHBoxLayout *m_control_area_layout;
     QPushButton *m_volume_btn;
 
-    struct BtnInfo {
-        QString key;
-        QString iconPath;
-    };
 
     static QPushButton *createButton(const BtnInfo &btn_info, QWidget *parent = nullptr);
 };

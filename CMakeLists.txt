@@ -6,10 +6,11 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-set(CMAKE_PREFIX_PATH
-        "C:/Users/edward/AppData/Local/Programs/Qt/6.8.3/mingw_64" #desktop
-        #        "C:/ProgramData/Qt/6.8.3/mingw_64" #laptop
-)
+set(QT_ROOT "C:/Users/edward/AppData/Local/Programs/Qt/6.8.3/mingw_64") # desktop
+# set(QT_ROOT "C:/ProgramData/Qt/6.8.3/mingw_64")                         # laptop
+
+# Keep vcpkg-injected search paths; append Qt path instead of overwriting CMAKE_PREFIX_PATH.
+list(APPEND CMAKE_PREFIX_PATH "${QT_ROOT}")
 
 find_package(Qt6 COMPONENTS
         Core
@@ -19,6 +20,8 @@ find_package(Qt6 COMPONENTS
         MultimediaWidgets
         Svg
         REQUIRED)
+
+find_package(taglib CONFIG REQUIRED)
 
 add_executable(EchoNote src/cpp/main.cpp
         src/h/mainwindow.h
@@ -40,7 +43,11 @@ add_executable(EchoNote src/cpp/main.cpp
         src/h/artistpage.h
         src/cpp/playlistpage.cpp
         src/h/playlistpage.h
+        src/h/commonstruct.h
+        src/cpp/scanmusic.cpp
+        src/h/scanmusic.h
 )
+
 target_link_libraries(EchoNote
         Qt::Core
         Qt::Gui
@@ -48,14 +55,18 @@ target_link_libraries(EchoNote
         Qt::Multimedia
         Qt::MultimediaWidgets
         Qt::Svg
+        TagLib::tag
 )
+
+#target_link_libraries(EchoNote PRIVATE TagLib::tag TagLib::tag_c TagLib::TagLib)
+
 
 if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
     set(DEBUG_SUFFIX)
     if (MSVC AND CMAKE_BUILD_TYPE MATCHES "Debug")
         set(DEBUG_SUFFIX "d")
     endif ()
-    set(QT_INSTALL_PATH "${CMAKE_PREFIX_PATH}")
+    set(QT_INSTALL_PATH "${QT_ROOT}")
     if (NOT EXISTS "${QT_INSTALL_PATH}/bin")
         set(QT_INSTALL_PATH "${QT_INSTALL_PATH}/..")
         if (NOT EXISTS "${QT_INSTALL_PATH}/bin")

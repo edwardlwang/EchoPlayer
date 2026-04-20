@@ -10,6 +10,8 @@
 #include <QVBoxLayout>
 #include <QButtonGroup>
 
+#include "commonstruct.h"
+
 class NavigationBar : public QWidget {
     Q_OBJECT
 
@@ -26,11 +28,7 @@ private:
     std::vector<QPushButton *> m_navigation_bar_buttons;
     QButtonGroup *m_navigation_bar_button_group;
 
-    struct BtnInfo {
-        QString key;
-        QString text;
-        QString iconPath;
-    };
+    QVector<BtnInfo> btnInfos;
 };
 
 

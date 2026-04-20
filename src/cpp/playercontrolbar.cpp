@@ -39,12 +39,12 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     m_song_info_area_layout->addWidget(m_song_info_label, 0, Qt::AlignLeft);
 
     const QVector<BtnInfo> btn_infos = {
-        {"playorderbtn", ":/icons/repeat.svg"},
-        {"prevbtn", ":/icons/previous.svg"},
-        {"playpausebtn", ":/icons/play.svg"},
-        {"nextbtn", ":/icons/next.svg"},
-        {"playlistbtn", ":/icons/playlist.svg"},
-        {"volumebtn", ":/icons/volume-high.svg"}
+        {"playorderbtn", "", ":/icons/repeat.svg"},
+        {"prevbtn", "", ":/icons/previous.svg"},
+        {"playpausebtn", "", ":/icons/play.svg"},
+        {"nextbtn", "", ":/icons/next.svg"},
+        {"playlistbtn", "", ":/icons/playlist.svg"},
+        {"volumebtn", "", ":/icons/volume-high.svg"}
     };
 
     m_play_order_btn = createButton(btn_infos[0], this);

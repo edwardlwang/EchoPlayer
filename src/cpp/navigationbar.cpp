@@ -19,7 +19,7 @@ NavigationBar::NavigationBar(QWidget *parent) : QWidget(parent) {
     m_navigation_bar_button_group = new QButtonGroup(this);
     m_navigation_bar_button_group->setExclusive(true);
 
-    const QVector<BtnInfo> btnInfos = {
+    btnInfos = {
         {"songs", "歌曲", ":/icons/microphone.svg"},
         {"albums", "专辑", ":/icons/disc.svg"},
         {"artists", "艺术家", ":/icons/user.svg"},
