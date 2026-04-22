@@ -7,9 +7,8 @@ int main(int argc, char *argv[]) {
     // 应用程序对象，在Qt项目中，有且只有一个
     QApplication a(argc, argv);
 
-    QFile f(":/styles/app.qss");
-    if (f.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qApp->setStyleSheet(QString::fromUtf8(f.readAll()));
+    if (QFile f(":/styles/app.qss"); f.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        a.setStyleSheet(QString::fromUtf8(f.readAll()));
     } else {
         qWarning() << "Failed to load stylesheet:" << f.errorString();
     }
