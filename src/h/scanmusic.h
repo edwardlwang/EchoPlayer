@@ -5,7 +5,6 @@
 #ifndef ECHONOTE_SCANMUSIC_H
 #define ECHONOTE_SCANMUSIC_H
 
-#include <QDateTime>
 #include <QDir>
 #include <QFileInfo>
 #include <QFutureWatcher>
@@ -22,20 +21,20 @@
 namespace ScanMusic {
     // 扫描选项：把“策略”集中到一个结构体里，便于后续扩展
     struct ScanOptions {
-        QString rootPath;              // 传空则自动用系统音乐目录
-        bool recursive = true;         // 是否递归子目录
-        bool includeHidden = false;    // 是否包含隐藏文件
-        int batchSize = 100;           // 每批回传给 UI 的数量
-        bool useCache = true;          // 是否启用内存缓存
+        QString rootPath; // 传空则自动用系统音乐目录
+        bool recursive = true; // 是否递归子目录
+        bool includeHidden = false; // 是否包含隐藏文件
+        int batchSize = 100; // 每批回传给 UI 的数量
+        bool useCache = true; // 是否启用内存缓存
     };
 
     // 统计信息：用于日志、调试、UI提示
     struct ScanStats {
-        int filesVisited = 0;      // 遍历到的文件总数（包含非音频）
-        int audioMatched = 0;      // 命中音频扩展名的数量
-        int metadataOk = 0;        // 成功读取元数据数量
-        int metadataFallback = 0;  // 使用兜底（文件名等）的数量
-        qint64 elapsedMs = 0;      // 总耗时
+        int filesVisited = 0; // 遍历到的文件总数（包含非音频）
+        int audioMatched = 0; // 命中音频扩展名的数量
+        int metadataOk = 0; // 成功读取元数据数量
+        int metadataFallback = 0; // 使用兜底（文件名等）的数量
+        qint64 elapsedMs = 0; // 总耗时
     };
 
     // 路径工具：把 "~/Music" 这类路径解析为真实路径
@@ -57,6 +56,7 @@ namespace ScanMusic {
 
     public:
         explicit ScannerService(QObject *parent = nullptr);
+
         ~ScannerService() override;
 
         // 启动异步扫描。若已有任务在跑，先取消再重启。
@@ -98,7 +98,7 @@ namespace ScanMusic {
         void runWorker(ScanOptions options);
 
         // 内部元数据读取（单文件）
-        SongInfo readOneFile(const QString &filePath, bool &metadataOk) const;
+        static SongInfo readOneFile(const QString &filePath, bool &metadataOk);
 
         // 构造文件签名（用于判断缓存是否可复用）
         static FileSignature makeSignature(const QFileInfo &fi);

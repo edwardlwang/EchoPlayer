@@ -7,6 +7,7 @@
 #include <QDateTime>
 #include <QDirIterator>
 #include <QElapsedTimer>
+#include <QFile>
 #include <QFileInfo>
 #include <QMutexLocker>
 #include <QSet>
@@ -24,10 +25,11 @@ namespace {
     };
 
     // 统一把 TagLib 字符串转成 QString
-    QString fromTagLibString(const TagLib::String &s) {
+    QString fromTagLibToString(const TagLib::String &s) {
         return QString::fromUtf8(s.toCString(true)).trimmed();
     }
 
+    // 判断文件是否为音频文件
     bool isAudioFileBySuffix(const QString &fileName) {
         const QString ext = QFileInfo(fileName).suffix().toLower();
         return kAudioExtensions.contains(ext);
@@ -46,16 +48,22 @@ namespace {
 
         metadataOk = false;
 
-        const QByteArray localPath = QDir::toNativeSeparators(filePath).toLocal8Bit();
-        TagLib::FileRef ref(localPath.constData());
+#ifdef Q_OS_WIN
+        // Use UTF-16 path on Windows to avoid lossy local-8bit conversion.
+        const std::wstring nativePath = QDir::toNativeSeparators(filePath).toStdWString();
+        TagLib::FileRef ref(nativePath.c_str());
+#else
+        const QByteArray nativePath = QFile::encodeName(QDir::toNativeSeparators(filePath));
+        TagLib::FileRef ref(nativePath.constData());
+#endif
         if (ref.isNull()) {
             return s;
         }
 
         if (TagLib::Tag *tag = ref.tag()) {
-            const QString title = fromTagLibString(tag->title());
-            const QString artist = fromTagLibString(tag->artist());
-            const QString album = fromTagLibString(tag->album());
+            const QString title = fromTagLibToString(tag->title());
+            const QString artist = fromTagLibToString(tag->artist());
+            const QString album = fromTagLibToString(tag->album());
 
             if (!title.isEmpty()) {
                 s.title = title;
@@ -127,7 +135,7 @@ QVector<SongInfo> ScanMusic::scanMusicSync(
     }
 
     const QDirIterator::IteratorFlags iteratorFlags =
-        options.recursive ? QDirIterator::Subdirectories : QDirIterator::NoIteratorFlags;
+            options.recursive ? QDirIterator::Subdirectories : QDirIterator::NoIteratorFlags;
 
     QDirIterator it(root, makeFileFilters(options.includeHidden), iteratorFlags);
     while (it.hasNext()) {
@@ -161,9 +169,9 @@ QVector<SongInfo> ScanMusic::scanMusicSync(
     }
 
     qDebug() << "Scanned songs:" << songs.size()
-             << "from" << root
-             << "visited" << stats.filesVisited
-             << "elapsed(ms)" << stats.elapsedMs;
+            << "from" << root
+            << "visited" << stats.filesVisited
+            << "elapsed(ms)" << stats.elapsedMs;
 
     return songs;
 }
@@ -172,7 +180,7 @@ ScanMusic::ScannerService::ScannerService(QObject *parent)
     : QObject(parent) {
     // queued signal 传自定义类型前，注册一次即可。
     qRegisterMetaType<SongInfo>("SongInfo");
-    qRegisterMetaType<QVector<SongInfo>>("QVector<SongInfo>");
+    qRegisterMetaType<QVector<SongInfo> >("QVector<SongInfo>");
     qRegisterMetaType<ScanStats>("ScanMusic::ScanStats");
 }
 
@@ -221,7 +229,7 @@ void ScanMusic::ScannerService::runWorker(ScanOptions options) {
     }
 
     const QDirIterator::IteratorFlags iteratorFlags =
-        options.recursive ? QDirIterator::Subdirectories : QDirIterator::NoIteratorFlags;
+            options.recursive ? QDirIterator::Subdirectories : QDirIterator::NoIteratorFlags;
 
     QDirIterator it(root, makeFileFilters(options.includeHidden), iteratorFlags);
     while (it.hasNext()) {
@@ -245,9 +253,7 @@ void ScanMusic::ScannerService::runWorker(ScanOptions options) {
         const QFileInfo fi(filePath);
         if (options.useCache) {
             const FileSignature sig = makeSignature(fi);
-            bool cacheHit = false;
-
-            {
+            bool cacheHit = false; {
                 QMutexLocker locker(&m_cacheMutex);
                 const auto itCache = m_cache.constFind(filePath);
                 if (itCache != m_cache.constEnd() && itCache->sig == sig) {
@@ -291,7 +297,7 @@ void ScanMusic::ScannerService::runWorker(ScanOptions options) {
     emit finished(allSongs, stats, m_cancelRequested.load());
 }
 
-SongInfo ScanMusic::ScannerService::readOneFile(const QString &filePath, bool &metadataOk) const {
+SongInfo ScanMusic::ScannerService::readOneFile(const QString &filePath, bool &metadataOk) {
     return readSongWithTagLib(filePath, metadataOk);
 }
 

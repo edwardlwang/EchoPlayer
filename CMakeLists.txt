@@ -6,8 +6,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-set(QT_ROOT "C:/Users/edward/AppData/Local/Programs/Qt/6.8.3/mingw_64") # desktop
-# set(QT_ROOT "C:/ProgramData/Qt/6.8.3/mingw_64")                         # laptop
+set(QT_ROOT "C:/Users/edward/Programs/Qt/6.8.3/msvc2022_64")
 
 # Keep vcpkg-injected search paths; append Qt path instead of overwriting CMAKE_PREFIX_PATH.
 list(APPEND CMAKE_PREFIX_PATH "${QT_ROOT}")
@@ -61,44 +60,25 @@ target_link_libraries(EchoNote
 #target_link_libraries(EchoNote PRIVATE TagLib::tag TagLib::tag_c TagLib::TagLib)
 
 
-if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-    set(DEBUG_SUFFIX)
-    if (MSVC AND CMAKE_BUILD_TYPE MATCHES "Debug")
-        set(DEBUG_SUFFIX "d")
-    endif ()
-    set(QT_INSTALL_PATH "${QT_ROOT}")
-    if (NOT EXISTS "${QT_INSTALL_PATH}/bin")
-        set(QT_INSTALL_PATH "${QT_INSTALL_PATH}/..")
-        if (NOT EXISTS "${QT_INSTALL_PATH}/bin")
-            set(QT_INSTALL_PATH "${QT_INSTALL_PATH}/..")
-        endif ()
-    endif ()
-    if (EXISTS "${QT_INSTALL_PATH}/plugins/platforms/qwindows${DEBUG_SUFFIX}.dll")
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E make_directory
-                "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/platforms/")
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy
-                "${QT_INSTALL_PATH}/plugins/platforms/qwindows${DEBUG_SUFFIX}.dll"
-                "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/platforms/")
+if (WIN32)
+    # Use Qt's deploy tool so vcpkg toolchain builds still copy all required runtime DLLs.
+    if (NOT WINDEPLOYQT_EXECUTABLE)
+        find_program(WINDEPLOYQT_EXECUTABLE NAMES windeployqt HINTS "${QT_ROOT}/bin")
     endif ()
 
-    if (EXISTS "${QT_INSTALL_PATH}/plugins/iconengines/qsvgicon${DEBUG_SUFFIX}.dll")
+    if (WINDEPLOYQT_EXECUTABLE)
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E make_directory
-                "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/iconengines/")
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy
-                "${QT_INSTALL_PATH}/plugins/iconengines/qsvgicon${DEBUG_SUFFIX}.dll"
-                "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/iconengines/")
+                COMMAND "${WINDEPLOYQT_EXECUTABLE}"
+                --no-translations
+                --no-system-d3d-compiler
+                --no-opengl-sw
+                "$<$<CONFIG:Debug>:--debug>$<$<NOT:$<CONFIG:Debug>>:--release>"
+                "$<TARGET_FILE:${PROJECT_NAME}>"
+                COMMENT "Deploying Qt runtime next to ${PROJECT_NAME}.exe"
+                VERBATIM)
+    else ()
+        message(WARNING "windeployqt not found; runtime launch may fail with missing Qt DLLs")
     endif ()
-
-    foreach (QT_LIB Core Gui Widgets Multimedia MultimediaWidgets Svg)
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy
-                "${QT_INSTALL_PATH}/bin/Qt6${QT_LIB}${DEBUG_SUFFIX}.dll"
-                "$<TARGET_FILE_DIR:${PROJECT_NAME}>")
-    endforeach (QT_LIB)
 
     if (WIN32 AND MINGW)
         get_filename_component(MINGW_BIN_DIR "${CMAKE_CXX_COMPILER}" DIRECTORY)
