@@ -45,6 +45,8 @@ add_executable(EchoNote src/cpp/main.cpp
         src/h/commonstruct.h
         src/cpp/scanmusic.cpp
         src/h/scanmusic.h
+        src/cpp/playbackcontroller.cpp
+        src/h/playbackcontroller.h
 )
 
 target_link_libraries(EchoNote

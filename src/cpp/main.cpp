@@ -1,6 +1,6 @@
 #include "../h/mainwindow.h"
 #include <QApplication>
-#include<QFile>
+#include <QFile>
 
 // main程序入口 argc为命令行变量的数量 argv为命令行变量的数组
 int main(int argc, char *argv[]) {
