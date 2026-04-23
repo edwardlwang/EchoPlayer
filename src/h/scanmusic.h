@@ -103,7 +103,6 @@ namespace ScanMusic {
         // 构造文件签名（用于判断缓存是否可复用）
         static FileSignature makeSignature(const QFileInfo &fi);
 
-    private:
         QFutureWatcher<void> m_watcher;
         std::atomic_bool m_cancelRequested{false};
 

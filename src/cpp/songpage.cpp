@@ -19,9 +19,29 @@ SongPage::SongPage(QWidget *parent) : QWidget(parent) {
     this->setLayout(m_main_layout);
 
     m_song_table = new QTableWidget(this);
+
+    // 1) 去掉单元格网格线
+    m_song_table->setShowGrid(false);
+
+    // 2) 去掉外框
+    m_song_table->setFrameShape(QFrame::NoFrame);
+
+    // 3) 不显示行号列（左侧竖表头）
+    m_song_table->verticalHeader()->setVisible(false);
+
+    // 不显示顶部表头
+    m_song_table->horizontalHeader()->setVisible(false);
+
     m_song_table->setColumnCount(4);
     m_song_table->setHorizontalHeaderLabels({"歌曲", "歌手", "专辑", "时长"});
-    m_song_table->horizontalHeader()->setStretchLastSection(true);
+    // m_song_table->horizontalHeader()->setStretchLastSection(true); // 最后一列吃满
+    auto *horizontal_header = m_song_table->horizontalHeader();
+    horizontal_header->setStretchLastSection(false); // 避免最后一列自动吃满
+    horizontal_header->setSectionResizeMode(0, QHeaderView::Stretch); // 标题列尽量占空间
+    horizontal_header->setSectionResizeMode(1, QHeaderView::ResizeToContents); // 其他列按内容
+    horizontal_header->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+    horizontal_header->setSectionResizeMode(3, QHeaderView::Fixed); // 时长列固定宽度
+    m_song_table->setColumnWidth(3, 72); // 60~90 都可以
     m_song_table->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_song_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_main_layout->addWidget(m_song_table);
@@ -52,11 +72,11 @@ SongPage::SongPage(QWidget *parent) : QWidget(parent) {
                 }
 
                 qDebug() << "Song scan finished. songs:" << allSongs.size()
-                         << "visited:" << stats.filesVisited
-                         << "matched:" << stats.audioMatched
-                         << "metadata ok:" << stats.metadataOk
-                         << "fallback:" << stats.metadataFallback
-                         << "elapsed(ms):" << stats.elapsedMs;
+                        << "visited:" << stats.filesVisited
+                        << "matched:" << stats.audioMatched
+                        << "metadata ok:" << stats.metadataOk
+                        << "fallback:" << stats.metadataFallback
+                        << "elapsed(ms):" << stats.elapsedMs;
             });
 
     ScanMusic::ScanOptions options;

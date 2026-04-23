@@ -26,6 +26,9 @@ public:
 
     void setSongs(const QVector<SongInfo> &songs);
 
+signals:
+    void songActivated(const SongInfo &song, int row);
+
 private:
     QVBoxLayout *m_main_layout = nullptr;
     QTableWidget *m_song_table = nullptr;
