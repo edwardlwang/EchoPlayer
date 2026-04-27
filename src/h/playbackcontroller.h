@@ -7,14 +7,18 @@
 
 #include <QMediaPlayer>
 #include <QVector>
+#include <QAudioOutput>
+#include <QDebug>
 
 #include "commonstruct.h"
 
-class PlaybackController {
+class PlaybackController : public QObject {
+    Q_OBJECT
+
 public:
     PlaybackController();
 
-    ~PlaybackController();
+    ~PlaybackController() override;
 
     void playNow(const SongInfo &song, int index, const QVector<SongInfo> &queue);
 
@@ -24,9 +28,13 @@ public:
 
     void playPrevious();
 
+signals :
+
 private:
     QMediaPlayer *m_player;
     QAudioOutput *m_audio;
+    QVector<SongInfo> m_songs_queue;
+    int m_current_song_index;
 };
 
 
