@@ -26,13 +26,15 @@ public:
 
     void setSongs(const QVector<SongInfo> &songs);
 
+    const QVector<SongInfo> &getSongs() const;
+
 signals:
     void songActivated(const SongInfo &song, int row);
 
 private:
-    QVBoxLayout *m_main_layout = nullptr;
-    QTableWidget *m_song_table = nullptr;
-    QVector<SongInfo> m_songs;
+    QVBoxLayout *m_main_layout = nullptr; // 垂直布局
+    QTableWidget *m_song_table = nullptr; // 歌曲列表
+    QVector<SongInfo> m_songs; // 存放所有歌曲
     ScanMusic::ScannerService *m_scanner = nullptr;
 
     // 异步批量回调时，增量追加到表格，避免每批都全量重绘。

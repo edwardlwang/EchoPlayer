@@ -46,6 +46,12 @@ SongPage::SongPage(QWidget *parent) : QWidget(parent) {
     m_song_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_main_layout->addWidget(m_song_table);
 
+    connect(m_song_table, &QTableWidget::cellDoubleClicked, this, [this](int row, int) {
+        if (row >= 0 && row < m_songs.size()) {
+            emit songActivated(m_songs[row], row);
+        }
+    });
+
     // 同步版本（会阻塞 UI），先保留作对照：
     // setSongs(ScanMusic::scanMusic(QString()));
 
@@ -131,6 +137,10 @@ void SongPage::setSongs(const QVector<SongInfo> &songs) {
     }
 
     qDebug() << "SongPage loaded songs:" << m_songs.size();
+}
+
+const QVector<SongInfo> &SongPage::getSongs() const {
+    return m_songs;
 }
 
 void SongPage::appendSongsBatch(const QVector<SongInfo> &songs) {

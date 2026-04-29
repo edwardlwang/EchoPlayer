@@ -64,7 +64,15 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
 
     m_volume_btn = createButton(btn_infos[5], this);
     m_control_area_layout->addWidget(m_volume_btn, 0, Qt::AlignRight);
+
+    connect(m_play_pause_btn, &QPushButton::clicked, this, &PlayerControlBar::playPauseClicked);
+    connect(m_next_btn, &QPushButton::clicked, this, &PlayerControlBar::nextClicked);
+    connect(m_prev_btn, &QPushButton::clicked, this, &PlayerControlBar::prevClicked);
+    connect(m_play_list_btn, &QPushButton::clicked, this, &PlayerControlBar::playlistClicked);
+    connect(m_play_order_btn, &QPushButton::clicked, this, &PlayerControlBar::playOrderClicked);
+    connect(m_volume_btn, &QPushButton::clicked, this, &PlayerControlBar::volumeClicked);
 }
+
 
 PlayerControlBar::~PlayerControlBar() {
     qDebug() << "PlayerControlBar析构完成";

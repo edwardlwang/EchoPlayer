@@ -20,6 +20,19 @@ public:
 
     ~PlayerControlBar() override;
 
+signals:
+    void playPauseClicked();
+
+    void nextClicked();
+
+    void prevClicked();
+
+    void playlistClicked();
+
+    void playOrderClicked();
+
+    void volumeClicked();
+
 private:
     QHBoxLayout *m_player_control_bar_layout;
 

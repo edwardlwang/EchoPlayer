@@ -38,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_content_layout->addWidget(m_content, 1);
 
     connect(m_navigation_bar, &NavigationBar::navigationButtonClicked,
-        m_content, &ContentArea::showPage);
+            m_content, &ContentArea::showPage);
 
     // 上方内容区占据剩余空间
     m_central_widget_layout->addWidget(m_content_widget, 1);
@@ -48,6 +48,20 @@ MainWindow::MainWindow(QWidget *parent)
     m_central_widget_layout->addWidget(m_player_control_bar);
 
 
+    m_song_page = m_content->findChild<SongPage *>("songpage");
+    m_playback_controller = new PlaybackController(this);
+
+    // 当页面发射 songActivated，把当前队列也传给播放控制器
+    connect(m_song_page, &SongPage::songActivated, this, [this](const SongInfo &song, int row) {
+        // 传入当前 SongPage 的全部 songs 作为 queue
+        m_playback_controller->playNow(song, row, m_song_page->getSongs());
+    });
+    connect(m_player_control_bar, &PlayerControlBar::playPauseClicked, m_playback_controller,
+            &PlaybackController::togglePlayPause);
+    connect(m_player_control_bar, &PlayerControlBar::nextClicked, m_playback_controller,
+            &PlaybackController::playNext);
+    connect(m_player_control_bar, &PlayerControlBar::prevClicked, m_playback_controller,
+            &PlaybackController::playPrevious);
 }
 
 MainWindow::~MainWindow() {

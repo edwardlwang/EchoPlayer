@@ -11,6 +11,7 @@
 #include "navigationbar.h"
 #include "playercontrolbar.h"
 #include "contentarea.h"
+#include "playbackcontroller.h"
 
 class MainWindow : public QMainWindow {
     // Q_OBJECT 是 Qt 框架的核心灵魂宏，它是 Qt 实现信号与槽（Signals & Slots）、元对象系统（Meta-Object System）等核心特性的必要前提。
@@ -33,6 +34,9 @@ private:
     NavigationBar *m_navigation_bar; // 左侧导航栏
     ContentArea *m_content; // 右侧主内容容器
     PlayerControlBar *m_player_control_bar; // 底部播放器控制栏
+
+    PlaybackController *m_playback_controller = nullptr;
+    SongPage *m_song_page = nullptr;
 };
 
 #endif //MUSICPLAYER_MAINWINDOW_H
