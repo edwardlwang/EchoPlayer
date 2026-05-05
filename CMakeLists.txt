@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(EchoNote)
+project(EchoPlayer)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_AUTOMOC ON)
@@ -22,7 +22,7 @@ find_package(Qt6 COMPONENTS
 
 find_package(taglib CONFIG REQUIRED)
 
-add_executable(EchoNote src/cpp/main.cpp
+add_executable(EchoPlayer src/cpp/main.cpp
         src/h/mainwindow.h
         src/cpp/mainwindow.cpp
         src/cpp/navigationbar.cpp
@@ -49,7 +49,7 @@ add_executable(EchoNote src/cpp/main.cpp
         src/h/playbackcontroller.h
 )
 
-target_link_libraries(EchoNote
+target_link_libraries(EchoPlayer PRIVATE
         Qt::Core
         Qt::Gui
         Qt::Widgets
@@ -59,7 +59,7 @@ target_link_libraries(EchoNote
         TagLib::tag
 )
 
-#target_link_libraries(EchoNote PRIVATE TagLib::tag TagLib::tag_c TagLib::TagLib)
+#target_link_libraries(EchoPlayer PRIVATE TagLib::tag TagLib::tag_c TagLib::TagLib)
 
 
 if (WIN32)

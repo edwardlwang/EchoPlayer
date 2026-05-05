@@ -32,15 +32,16 @@ SongPage::SongPage(QWidget *parent) : QWidget(parent) {
     // 不显示顶部表头
     m_song_table->horizontalHeader()->setVisible(false);
 
-    m_song_table->setColumnCount(4);
-    m_song_table->setHorizontalHeaderLabels({"歌曲", "歌手", "专辑", "时长"});
+    m_song_table->setColumnCount(5);
+    m_song_table->setHorizontalHeaderLabels({"封面", "歌曲", "歌手", "专辑", "时长"});
     // m_song_table->horizontalHeader()->setStretchLastSection(true); // 最后一列吃满
     auto *horizontal_header = m_song_table->horizontalHeader();
     horizontal_header->setStretchLastSection(false); // 避免最后一列自动吃满
-    horizontal_header->setSectionResizeMode(0, QHeaderView::Stretch); // 标题列尽量占空间
-    horizontal_header->setSectionResizeMode(1, QHeaderView::ResizeToContents); // 其他列按内容
-    horizontal_header->setSectionResizeMode(2, QHeaderView::ResizeToContents);
-    horizontal_header->setSectionResizeMode(3, QHeaderView::Fixed); // 时长列固定宽度
+    horizontal_header->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    horizontal_header->setSectionResizeMode(1, QHeaderView::Stretch); // 标题列尽量占空间
+    horizontal_header->setSectionResizeMode(2, QHeaderView::ResizeToContents); // 其他列按内容
+    horizontal_header->setSectionResizeMode(3, QHeaderView::ResizeToContents);
+    horizontal_header->setSectionResizeMode(4, QHeaderView::Fixed); // 时长列固定宽度
     m_song_table->setColumnWidth(3, 72); // 60~90 都可以
     m_song_table->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_song_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -99,8 +100,9 @@ SongPage::~SongPage() {
     qDebug() << "SongPage析构完成";
 }
 
-void SongPage::addSong(const QString &title, const QString &artist, const QString &album,
-                       const int &duration_sec) const {
+void SongPage::addSong(const QImage &cover, const QString &title, const QString &artist, const QString &album,
+                       const int &duration_sec)
+const {
     const int row = m_song_table->rowCount();
     m_song_table->insertRow(row);
 
@@ -112,10 +114,14 @@ void SongPage::addSong(const QString &title, const QString &artist, const QStrin
             .arg(sec, 2, 10, QChar('0'));
 
     // addSong 只负责“渲染一行”，不做扫描/刷新，避免递归调用。
-    m_song_table->setItem(row, 0, new QTableWidgetItem(title));
-    m_song_table->setItem(row, 1, new QTableWidgetItem(artist));
-    m_song_table->setItem(row, 2, new QTableWidgetItem(album));
-    m_song_table->setItem(row, 3, new QTableWidgetItem(duration));
+    auto *cover_item = new QTableWidgetItem();
+    cover_item->setIcon(QIcon(QPixmap::fromImage(cover.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation))));
+
+    m_song_table->setItem(row, 0, cover_item);
+    m_song_table->setItem(row, 1, new QTableWidgetItem(title));
+    m_song_table->setItem(row, 2, new QTableWidgetItem(artist));
+    m_song_table->setItem(row, 3, new QTableWidgetItem(album));
+    m_song_table->setItem(row, 4, new QTableWidgetItem(duration));
 }
 
 void SongPage::setSongs(const QVector<SongInfo> &songs) {
@@ -124,6 +130,11 @@ void SongPage::setSongs(const QVector<SongInfo> &songs) {
 
     // setSongs 负责批量刷新表格。
     for (const SongInfo &song: m_songs) {
+        QImage cover = song.cover;
+        if (cover.isNull()) {
+            cover = QImage(":/imgs/album.png");
+        }
+
         QString title = song.title;
 
         if (title.trimmed().isEmpty()) {
@@ -133,7 +144,7 @@ void SongPage::setSongs(const QVector<SongInfo> &songs) {
         const QString artist = song.artist.trimmed().isEmpty() ? "未知歌手" : song.artist;
         const QString album = song.album.trimmed().isEmpty() ? "-" : song.album;
 
-        addSong(title, artist, album, song.duration_sec);
+        addSong(cover, title, artist, album, song.duration_sec);
     }
 
     qDebug() << "SongPage loaded songs:" << m_songs.size();
@@ -147,6 +158,11 @@ void SongPage::appendSongsBatch(const QVector<SongInfo> &songs) {
     for (const SongInfo &song: songs) {
         m_songs.push_back(song);
 
+        QImage cover = song.cover;
+        if (cover.isNull()) {
+            cover = QImage(":/imgs/album.png");
+        }
+
         QString title = song.title;
         if (title.trimmed().isEmpty()) {
             title = QFileInfo(song.file_path).completeBaseName();
@@ -155,6 +171,7 @@ void SongPage::appendSongsBatch(const QVector<SongInfo> &songs) {
         const QString artist = song.artist.trimmed().isEmpty() ? "未知歌手" : song.artist;
         const QString album = song.album.trimmed().isEmpty() ? "-" : song.album;
 
-        addSong(title, artist, album, song.duration_sec);
+        addSong(cover, title, artist,
+                album, song.duration_sec);
     }
 }

@@ -253,7 +253,8 @@ void ScanMusic::ScannerService::runWorker(ScanOptions options) {
         const QFileInfo fi(filePath);
         if (options.useCache) {
             const FileSignature sig = makeSignature(fi);
-            bool cacheHit = false; {
+            bool cacheHit = false;
+            {
                 QMutexLocker locker(&m_cacheMutex);
                 const auto itCache = m_cache.constFind(filePath);
                 if (itCache != m_cache.constEnd() && itCache->sig == sig) {

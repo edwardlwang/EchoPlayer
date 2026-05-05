@@ -110,6 +110,10 @@
         <file alias="x-mark.svg">res/icons/vidstack/x-mark.svg</file>
     </qresource>
 
+    <qresource prefix="/imgs">
+        <file alias="ablum.png">res/imgs/album.png</file>
+    </qresource>
+
     <qresource prefix="/styles">
         <file alias="app.qss">src/styles/app.qss</file>
     </qresource>

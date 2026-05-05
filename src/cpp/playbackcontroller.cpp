@@ -83,3 +83,5 @@ void PlaybackController::playPrevious() {
     const SongInfo &prev_song = m_songs_queue[m_current_song_index];
     playNow(prev_song, m_current_song_index, m_songs_queue);
 }
+
+

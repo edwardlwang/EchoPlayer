@@ -16,7 +16,7 @@ class PlaybackController : public QObject {
     Q_OBJECT
 
 public:
-    PlaybackController(QWidget *parent = nullptr);
+    explicit PlaybackController(QWidget *parent = nullptr);
 
     ~PlaybackController() override;
 
