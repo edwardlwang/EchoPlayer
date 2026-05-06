@@ -6,11 +6,34 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-set(QT_ROOT "C:/Users/edward/Programs/Qt/6.8.3/msvc2022_64")
+#set(QT_ROOT "C:/Users/edward/Programs/Qt/6.8.3/msvc2022_64")
+#list(APPEND CMAKE_PREFIX_PATH "${QT_ROOT}")
 
-# Keep vcpkg-injected search paths; append Qt path instead of overwriting CMAKE_PREFIX_PATH.
-list(APPEND CMAKE_PREFIX_PATH "${QT_ROOT}")
+# -----------------------------------------------------------------------------
+# 跨平台 Qt 路径设置（仅在用户未通过命令行或环境变量指定时生效）
+# -----------------------------------------------------------------------------
+if (WIN32)
+    # 将用户目录路径转换为 CMake 格式（正斜杠）
+    file(TO_CMAKE_PATH "$ENV{USERPROFILE}/Programs/Qt/6.8.3/msvc2022_64" QT_DEFAULT_PATH)
+elseif (UNIX AND NOT APPLE)
+    file(TO_CMAKE_PATH "$ENV{HOME}/Programs/Qt/6.8.3/gcc_64" QT_DEFAULT_PATH)
+endif ()
 
+if (QT_DEFAULT_PATH AND EXISTS "${QT_DEFAULT_PATH}")
+    list(APPEND CMAKE_PREFIX_PATH "${QT_DEFAULT_PATH}")
+    message(STATUS "Added default Qt path: ${QT_DEFAULT_PATH}")
+elseif (QT_DEFAULT_PATH AND NOT EXISTS "${QT_DEFAULT_PATH}")
+    message(WARNING "Default Qt path '${QT_DEFAULT_PATH}' does not exist. "
+            "Please set CMAKE_PREFIX_PATH or Qt6_DIR manually.")
+endif ()
+
+# 可选：打印最终的前缀路径，便于调试
+message(STATUS "CMAKE_PREFIX_PATH = ${CMAKE_PREFIX_PATH}")
+
+
+# -----------------------------------------------------------------------------
+# 查找 Qt6 组件
+# -----------------------------------------------------------------------------
 find_package(Qt6 COMPONENTS
         Core
         Gui
@@ -20,8 +43,18 @@ find_package(Qt6 COMPONENTS
         Svg
         REQUIRED)
 
+# -----------------------------------------------------------------------------
+# 查找 taglib（vcpkg 安装）
+# -----------------------------------------------------------------------------
 find_package(taglib CONFIG REQUIRED)
 
+
+# 获取 Qt6 安装根路径（用于后续 windeployqt 查找）
+get_target_property(QT6_LOCATION Qt6::Core LOCATION)
+if (QT6_LOCATION)
+    get_filename_component(QT6_BIN_DIR "${QT6_LOCATION}" DIRECTORY)
+    get_filename_component(QT_INSTALL_PREFIX "${QT6_BIN_DIR}" DIRECTORY)
+endif ()
 
 # vcpkg's taglib package may export TagLib::TagLib or TagLib::tag depending on version.
 set(TAGLIB_LINK_TARGET "")
@@ -33,6 +66,9 @@ else ()
     message(FATAL_ERROR "taglib found, but no known CMake target exported (expected TagLib::TagLib or TagLib::tag)")
 endif ()
 
+# -----------------------------------------------------------------------------
+# 添加可执行文件及源文件
+# -----------------------------------------------------------------------------
 add_executable(EchoPlayer src/cpp/main.cpp
         src/h/mainwindow.h
         src/cpp/mainwindow.cpp
@@ -60,6 +96,9 @@ add_executable(EchoPlayer src/cpp/main.cpp
         src/h/playbackcontroller.h
 )
 
+# -----------------------------------------------------------------------------
+# 链接库
+# -----------------------------------------------------------------------------
 target_link_libraries(EchoPlayer PRIVATE
         Qt::Core
         Qt::Gui
@@ -67,16 +106,18 @@ target_link_libraries(EchoPlayer PRIVATE
         Qt::Multimedia
         Qt::MultimediaWidgets
         Qt::Svg
-        TagLib::tag
+        ${TAGLIB_LINK_TARGET}
 )
 
-#target_link_libraries(EchoPlayer PRIVATE TagLib::tag TagLib::tag_c TagLib::TagLib)
-
-
+# -----------------------------------------------------------------------------
+# Windows 部署（windeployqt）
+# -----------------------------------------------------------------------------
 if (WIN32)
     # Use Qt's deploy tool so vcpkg toolchain builds still copy all required runtime DLLs.
     if (NOT WINDEPLOYQT_EXECUTABLE)
-        find_program(WINDEPLOYQT_EXECUTABLE NAMES windeployqt HINTS "${QT_ROOT}/bin")
+        find_program(WINDEPLOYQT_EXECUTABLE
+                NAMES windeployqt
+                HINTS "${QT_ROOT}/bin")
     endif ()
 
     if (WINDEPLOYQT_EXECUTABLE)
@@ -93,22 +134,42 @@ if (WIN32)
         message(WARNING "windeployqt not found; runtime launch may fail with missing Qt DLLs")
     endif ()
 
-    if (WIN32 AND MINGW)
-        get_filename_component(MINGW_BIN_DIR "${CMAKE_CXX_COMPILER}" DIRECTORY)
-        set(MINGW_RUNTIME_DLLS
-                "${MINGW_BIN_DIR}/libstdc++-6.dll"
-                "${MINGW_BIN_DIR}/libwinpthread-1.dll"
-                "${MINGW_BIN_DIR}/libgcc_s_seh-1.dll"
-        )
-        foreach (DLL ${MINGW_RUNTIME_DLLS})
-            if (EXISTS ${DLL})
-                add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                        COMMAND ${CMAKE_COMMAND} -E copy
-                        "${DLL}"
-                        "$<TARGET_FILE_DIR:${PROJECT_NAME}>"
-                )
-            endif ()
-        endforeach ()
-    endif ()
+endif ()
 
+# -----------------------------------------------------------------------------
+# Linux 部署（使用 Qt 官方部署工具）
+# -----------------------------------------------------------------------------
+if (UNIX AND NOT APPLE AND NOT WIN32)
+    # 需要 CMake 3.18+ 才能使用 qt_generate_deploy_app_script
+    if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.18)
+        # 包含部署支持模块
+        include(DeployQt6)
+
+        # 生成部署脚本（自动处理 Qt 库和 taglib 等依赖）
+        qt_generate_deploy_app_script(
+                TARGET EchoPlayer
+                OUTPUT_SCRIPT deploy_script
+                DEPLOY_TOOL_OPTIONS --no-strip  # 可选：保留调试符号
+        )
+
+        # 在安装时执行部署脚本
+        install(SCRIPT ${deploy_script})
+
+        # 可选：在构建目录也生成一个可直接运行的部署脚本（方便测试）
+        file(GENERATE OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/deploy.sh CONTENT
+                "#!/bin/bash\n${deploy_script}\necho 'Deployment complete. You can now run bin/EchoPlayer'")
+        file(CHMOD ${CMAKE_CURRENT_BINARY_DIR}/deploy.sh PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
+
+        message(STATUS "Linux deployment script generated: ${deploy_script}")
+        message(STATUS "After installing (make install), the application will be self-contained.")
+    else ()
+        message(WARNING "CMake version >= 3.18 is required for automatic Linux deployment. "
+                "You will need to manually run linuxdeployqt or ldd to collect dependencies.")
+        # 降级方案：尝试查找 linuxdeployqt
+        find_program(LINUXDEPLOYQT_EXECUTABLE linuxdeployqt)
+        if (LINUXDEPLOYQT_EXECUTABLE)
+            message(STATUS "Found linuxdeployqt, you can manually run: "
+                    "${LINUXDEPLOYQT_EXECUTABLE} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/EchoPlayer -bundle-non-qt-libs")
+        endif ()
+    endif ()
 endif ()
