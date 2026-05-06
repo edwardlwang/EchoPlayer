@@ -6,12 +6,12 @@
 #define ECHONOTE_COMMONSTRUCT_H
 
 #include <QString>
-#include <QImage>
+#include <QPixmap>
 
 // 歌曲信息
 struct SongInfo {
     QString file_path;
-    QImage cover;
+    QPixmap cover;
     QString title;
     QString artist;
     QString album;

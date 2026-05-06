@@ -37,12 +37,14 @@ SongPage::SongPage(QWidget *parent) : QWidget(parent) {
     // m_song_table->horizontalHeader()->setStretchLastSection(true); // 最后一列吃满
     auto *horizontal_header = m_song_table->horizontalHeader();
     horizontal_header->setStretchLastSection(false); // 避免最后一列自动吃满
-    horizontal_header->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    horizontal_header->setSectionResizeMode(0, QHeaderView::Fixed);
+    m_song_table->setColumnWidth(0, 48);
+    m_song_table->verticalHeader()->setDefaultSectionSize(48);
     horizontal_header->setSectionResizeMode(1, QHeaderView::Stretch); // 标题列尽量占空间
     horizontal_header->setSectionResizeMode(2, QHeaderView::ResizeToContents); // 其他列按内容
     horizontal_header->setSectionResizeMode(3, QHeaderView::ResizeToContents);
     horizontal_header->setSectionResizeMode(4, QHeaderView::Fixed); // 时长列固定宽度
-    m_song_table->setColumnWidth(3, 72); // 60~90 都可以
+    // m_song_table->setColumnWidth(3, 72
     m_song_table->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_song_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_main_layout->addWidget(m_song_table);
@@ -100,7 +102,7 @@ SongPage::~SongPage() {
     qDebug() << "SongPage析构完成";
 }
 
-void SongPage::addSong(const QImage &cover, const QString &title, const QString &artist, const QString &album,
+void SongPage::addSong(const QPixmap &cover, const QString &title, const QString &artist, const QString &album,
                        const int &duration_sec)
 const {
     const int row = m_song_table->rowCount();
@@ -115,7 +117,10 @@ const {
 
     // addSong 只负责“渲染一行”，不做扫描/刷新，避免递归调用。
     auto *cover_item = new QTableWidgetItem();
-    cover_item->setIcon(QIcon(QPixmap::fromImage(cover.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation))));
+    QPixmap scaled_cover = cover.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    cover_item->setData(Qt::DecorationRole, scaled_cover);
+    // cover_item->setIcon(QIcon(cover));
+    cover_item->setSizeHint(QSize(48, 48));
 
     m_song_table->setItem(row, 0, cover_item);
     m_song_table->setItem(row, 1, new QTableWidgetItem(title));
@@ -130,9 +135,9 @@ void SongPage::setSongs(const QVector<SongInfo> &songs) {
 
     // setSongs 负责批量刷新表格。
     for (const SongInfo &song: m_songs) {
-        QImage cover = song.cover;
+        QPixmap cover = song.cover;
         if (cover.isNull()) {
-            cover = QImage(":/imgs/album.png");
+            cover = QPixmap(":/imgs/album.png");
         }
 
         QString title = song.title;
@@ -158,9 +163,9 @@ void SongPage::appendSongsBatch(const QVector<SongInfo> &songs) {
     for (const SongInfo &song: songs) {
         m_songs.push_back(song);
 
-        QImage cover = song.cover;
+        QPixmap cover = song.cover;
         if (cover.isNull()) {
-            cover = QImage(":/imgs/album.png");
+            cover = QPixmap(":/imgs/album.png");
         }
 
         QString title = song.title;

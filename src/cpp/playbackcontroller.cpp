@@ -39,7 +39,7 @@ PlaybackController::PlaybackController(QWidget *parent) : QObject(parent) {
 
 PlaybackController::~PlaybackController() {
     m_player->stop();
-    qDebug() << " PlaybackController析构完成";
+    qDebug() << "PlaybackController析构完成";
 }
 
 void PlaybackController::playNow(const SongInfo &song, int index, const QVector<SongInfo> &queue) {

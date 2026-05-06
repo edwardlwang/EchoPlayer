@@ -29,9 +29,10 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     m_song_info_layout->setContentsMargins(0, 0, 0, 0);
     m_song_info_layout->setSpacing(10); // 封面和文字区的间距
 
-    m_cover_btn = new QPushButton("封面", m_song_info_widget);
+    m_cover_btn = new QPushButton(m_song_info_widget);
     m_cover_btn->setFixedSize(48, 48);
     m_cover_btn->setObjectName("coverbtn");
+    m_cover_btn->setFlat(true);
     m_song_info_layout->addWidget(m_cover_btn);
 
     m_song_meta_widget = new QWidget(m_song_info_widget);
@@ -99,8 +100,11 @@ PlayerControlBar::~PlayerControlBar() {
     qDebug() << "PlayerControlBar析构完成";
 }
 
-void PlayerControlBar::updateSongInfo(const SongInfo &song) {
-    // m_cover_btn->set
+void PlayerControlBar::updateSongInfo(const SongInfo &song) const {
+    m_cover_btn->setIcon(QIcon(song.cover));
+    m_cover_btn->setIconSize(QSize(48, 48));
+    m_singer_label->setText(song.artist);
+    m_album_label->setText(song.album);
 }
 
 QPushButton *PlayerControlBar::createButton(const BtnInfo &btn_info, QWidget *parent) {

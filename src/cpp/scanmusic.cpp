@@ -17,6 +17,12 @@
 #include <taglib/audioproperties.h>
 #include <taglib/fileref.h>
 #include <taglib/tag.h>
+#include <taglib/mpegfile.h>        // MPEG::File
+#include <taglib/id3v2tag.h>        // ID3v2::Tag
+#include <taglib/attachedpictureframe.h> // AttachedPictureFrame
+
+#include <taglib/flacfile.h>        // FLAC::File
+#include <taglib/flacpicture.h>     // FLAC::Picture
 
 namespace {
     // 支持的音频扩展名（小写）
@@ -36,52 +42,95 @@ namespace {
     }
 
     // 单文件读取：优先用 TagLib 标签，失败时回退到文件名。
-    SongInfo readSongWithTagLib(const QString &filePath, bool &metadataOk) {
-        SongInfo s;
-        const QFileInfo fi(filePath);
+    SongInfo readSongWithTagLib(const QString &file_path, bool &meta_data_ok) {
+        SongInfo song_info;
 
-        s.file_path = filePath;
-        s.title = fi.completeBaseName();
-        s.artist = QStringLiteral("未知歌手");
-        s.album = QStringLiteral("-");
-        s.duration_sec = 0;
+        song_info.cover = QPixmap(":/imgs/album.png");
+        song_info.file_path = file_path;
+        song_info.title = QFileInfo(file_path).completeBaseName();
+        song_info.artist = QStringLiteral("未知歌手");
+        song_info.album = QStringLiteral("-");
+        song_info.duration_sec = 0;
 
-        metadataOk = false;
+        meta_data_ok = false;
 
 #ifdef Q_OS_WIN
         // Use UTF-16 path on Windows to avoid lossy local-8bit conversion.
-        const std::wstring nativePath = QDir::toNativeSeparators(filePath).toStdWString();
+        const std::wstring nativePath = QDir::toNativeSeparators(file_path).toStdWString();
         TagLib::FileRef ref(nativePath.c_str());
 #else
         const QByteArray nativePath = QFile::encodeName(QDir::toNativeSeparators(filePath));
         TagLib::FileRef ref(nativePath.constData());
 #endif
         if (ref.isNull()) {
-            return s;
+            return song_info;
         }
 
         if (TagLib::Tag *tag = ref.tag()) {
+            // const QPixmap cover =
+
+
             const QString title = fromTagLibToString(tag->title());
             const QString artist = fromTagLibToString(tag->artist());
             const QString album = fromTagLibToString(tag->album());
 
             if (!title.isEmpty()) {
-                s.title = title;
+                song_info.title = title;
             }
             if (!artist.isEmpty()) {
-                s.artist = artist;
+                song_info.artist = artist;
             }
             if (!album.isEmpty()) {
-                s.album = album;
+                song_info.album = album;
             }
         }
 
-        if (TagLib::AudioProperties *props = ref.audioProperties()) {
-            s.duration_sec = props->lengthInSeconds();
+        // ---- 仅提取 MP3 和 FLAC 的嵌入式封面 ----
+        TagLib::File *file = ref.file();
+        QByteArray coverBytes;
+        if (file) {
+            // --- MP3: ID3v2 标签中的 APIC (Attached Picture) 帧 ---
+            if (auto *mpegFile = dynamic_cast<TagLib::MPEG::File *>(file)) {
+                if (mpegFile->ID3v2Tag()) {
+                    const auto &frameListMap = mpegFile->ID3v2Tag()->frameListMap();
+                    auto it = frameListMap.find("APIC");
+                    if (it != frameListMap.end() && !it->second.isEmpty()) {
+                        auto *pic = dynamic_cast<TagLib::ID3v2::AttachedPictureFrame *>(
+                            it->second.front());
+                        if (pic) {
+                            const TagLib::ByteVector &data = pic->picture();
+                            coverBytes = QByteArray(data.data(), static_cast<int>(data.size()));
+                        }
+                    }
+                }
+            }
+            // --- FLAC: 内置 Picture 列表（通常取第一张） ---
+            else if (auto *flacFile = dynamic_cast<TagLib::FLAC::File *>(file)) {
+                const TagLib::List<TagLib::FLAC::Picture *> &pics = flacFile->pictureList();
+                if (!pics.isEmpty()) {
+                    const TagLib::FLAC::Picture *pic = pics.front();
+                    const TagLib::ByteVector &data = pic->data();
+                    coverBytes = QByteArray(data.data(), static_cast<int>(data.size()));
+                }
+            }
         }
 
-        metadataOk = true;
-        return s;
+        if (!coverBytes.isEmpty()) {
+            QPixmap pix;
+            if (pix.loadFromData(coverBytes)) {
+                song_info.cover = pix;
+            } else {
+                qWarning() << "Cannot decode cover image for:" << file_path;
+            }
+        }
+        // coverBytes 为空时，song_info.cover 保持默认的 album.png
+
+        if (TagLib::AudioProperties *props = ref.audioProperties()) {
+            song_info.duration_sec = props->lengthInSeconds();
+        }
+
+        meta_data_ok = true;
+        return song_info;
     }
 
     QDir::Filters makeFileFilters(bool includeHidden) {

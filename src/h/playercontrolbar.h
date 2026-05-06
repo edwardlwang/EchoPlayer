@@ -20,7 +20,7 @@ public:
 
     ~PlayerControlBar() override;
 
-    void updateSongInfo(const SongInfo &song);
+    void updateSongInfo(const SongInfo &song) const;
 
 
 signals:

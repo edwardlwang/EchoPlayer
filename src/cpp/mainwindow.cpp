@@ -62,6 +62,8 @@ MainWindow::MainWindow(QWidget *parent)
             &PlaybackController::playNext);
     connect(m_player_control_bar, &PlayerControlBar::prevClicked, m_playback_controller,
             &PlaybackController::playPrevious);
+
+    connect(m_song_page, &SongPage::songActivated, m_player_control_bar, &PlayerControlBar::updateSongInfo);
 }
 
 MainWindow::~MainWindow() {
