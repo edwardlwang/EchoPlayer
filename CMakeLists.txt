@@ -22,6 +22,17 @@ find_package(Qt6 COMPONENTS
 
 find_package(taglib CONFIG REQUIRED)
 
+
+# vcpkg's taglib package may export TagLib::TagLib or TagLib::tag depending on version.
+set(TAGLIB_LINK_TARGET "")
+if (TARGET TagLib::TagLib)
+    set(TAGLIB_LINK_TARGET TagLib::TagLib)
+elseif (TARGET TagLib::tag)
+    set(TAGLIB_LINK_TARGET TagLib::tag)
+else ()
+    message(FATAL_ERROR "taglib found, but no known CMake target exported (expected TagLib::TagLib or TagLib::tag)")
+endif ()
+
 add_executable(EchoPlayer src/cpp/main.cpp
         src/h/mainwindow.h
         src/cpp/mainwindow.cpp
