@@ -22,7 +22,7 @@ public:
 
     ~SongPage() override;
 
-    void addSong(const QPixmap &cover, const QString &title, const QString &artist, const QString &album,
+    void addSong(const QImage &cover, const QString &title, const QString &artist, const QString &album,
                  const int &duration_sec) const;
 
     void setSongs(const QVector<SongInfo> &songs);

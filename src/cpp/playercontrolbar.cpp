@@ -31,6 +31,7 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
 
     m_cover_btn = new QPushButton(m_song_info_widget);
     m_cover_btn->setFixedSize(48, 48);
+    m_cover_btn->setIcon(QIcon(":/imgs/album.png"));
     m_cover_btn->setObjectName("coverbtn");
     m_cover_btn->setFlat(true);
     m_song_info_layout->addWidget(m_cover_btn);
@@ -101,7 +102,7 @@ PlayerControlBar::~PlayerControlBar() {
 }
 
 void PlayerControlBar::updateSongInfo(const SongInfo &song) const {
-    m_cover_btn->setIcon(QIcon(song.cover));
+    m_cover_btn->setIcon(QIcon(QPixmap::fromImage(song.cover)));
     m_cover_btn->setIconSize(QSize(48, 48));
     m_singer_label->setText(song.artist);
     m_album_label->setText(song.album);
@@ -113,7 +114,7 @@ QPushButton *PlayerControlBar::createButton(const BtnInfo &btn_info, QWidget *pa
     btn->setObjectName(btn_info.key);
     btn->setIconSize(QSize(32, 32));
     btn->setFlat(true);
-    btn->setIcon(QIcon(btn_info.iconPath));
+    btn->setIcon(QIcon(btn_info.icon_path));
     btn->setCursor(Qt::PointingHandCursor);
     btn->setStyleSheet("QPushButton { padding: 0; margin: 0px; border: none; }");
     return btn;

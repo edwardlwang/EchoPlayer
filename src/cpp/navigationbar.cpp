@@ -35,7 +35,7 @@ NavigationBar::NavigationBar(QWidget *parent) : QWidget(parent) {
         btn->setFlat(true);
         btn->setFixedSize(108, 60);
         btn->setIconSize(QSize(32, 32));
-        btn->setIcon(QIcon(item.iconPath));
+        btn->setIcon(QIcon(item.icon_path));
         btn->setCursor(Qt::PointingHandCursor);
         if (item.key == "songs") {
             btn->setChecked(true);

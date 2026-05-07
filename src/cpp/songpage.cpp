@@ -102,7 +102,7 @@ SongPage::~SongPage() {
     qDebug() << "SongPage析构完成";
 }
 
-void SongPage::addSong(const QPixmap &cover, const QString &title, const QString &artist, const QString &album,
+void SongPage::addSong(const QImage &cover, const QString &title, const QString &artist, const QString &album,
                        const int &duration_sec)
 const {
     const int row = m_song_table->rowCount();
@@ -117,7 +117,7 @@ const {
 
     // addSong 只负责“渲染一行”，不做扫描/刷新，避免递归调用。
     auto *cover_item = new QTableWidgetItem();
-    QPixmap scaled_cover = cover.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    QImage scaled_cover = cover.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     cover_item->setData(Qt::DecorationRole, scaled_cover);
     // cover_item->setIcon(QIcon(cover));
     cover_item->setSizeHint(QSize(48, 48));
@@ -135,9 +135,9 @@ void SongPage::setSongs(const QVector<SongInfo> &songs) {
 
     // setSongs 负责批量刷新表格。
     for (const SongInfo &song: m_songs) {
-        QPixmap cover = song.cover;
+        QImage cover = song.cover;
         if (cover.isNull()) {
-            cover = QPixmap(":/imgs/album.png");
+            cover = QImage(":/imgs/album.png");
         }
 
         QString title = song.title;
@@ -163,9 +163,9 @@ void SongPage::appendSongsBatch(const QVector<SongInfo> &songs) {
     for (const SongInfo &song: songs) {
         m_songs.push_back(song);
 
-        QPixmap cover = song.cover;
+        QImage cover = song.cover;
         if (cover.isNull()) {
-            cover = QPixmap(":/imgs/album.png");
+            cover = QImage(":/imgs/album.png");
         }
 
         QString title = song.title;

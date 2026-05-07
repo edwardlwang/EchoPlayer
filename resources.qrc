@@ -111,7 +111,7 @@
     </qresource>
 
     <qresource prefix="/imgs">
-        <file alias="ablum.png">res/imgs/album.png</file>
+        <file alias="album.png">res/imgs/album.png</file>
     </qresource>
 
     <qresource prefix="/styles">

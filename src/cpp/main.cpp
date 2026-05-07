@@ -6,9 +6,13 @@
 int main(int argc, char *argv[]) {
     // 应用程序对象，在Qt项目中，有且只有一个
     QApplication a(argc, argv);
+    QCoreApplication::setApplicationName("EchoPlayer");
+    QCoreApplication::setOrganizationName("WIT");
+    QCoreApplication::setApplicationVersion("0.0.1");
 
     if (QFile f(":/styles/app.qss"); f.open(QIODevice::ReadOnly | QIODevice::Text)) {
         a.setStyleSheet(QString::fromUtf8(f.readAll()));
+        f.close();
     } else {
         qWarning() << "Failed to load stylesheet:" << f.errorString();
     }

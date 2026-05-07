@@ -100,12 +100,12 @@ add_executable(EchoPlayer src/cpp/main.cpp
 # 链接库
 # -----------------------------------------------------------------------------
 target_link_libraries(EchoPlayer PRIVATE
-        Qt::Core
-        Qt::Gui
-        Qt::Widgets
+        Qt6::Core
+        Qt6::Gui
+        Qt6::Widgets
         Qt::Multimedia
-        Qt::MultimediaWidgets
-        Qt::Svg
+        Qt6::MultimediaWidgets
+        Qt6::Svg
         ${TAGLIB_LINK_TARGET}
 )
 

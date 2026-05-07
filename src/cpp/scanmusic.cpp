@@ -45,7 +45,7 @@ namespace {
     SongInfo readSongWithTagLib(const QString &file_path, bool &meta_data_ok) {
         SongInfo song_info;
 
-        song_info.cover = QPixmap(":/imgs/album.png");
+        song_info.cover = QImage(":/imgs/album.png");
         song_info.file_path = file_path;
         song_info.title = QFileInfo(file_path).completeBaseName();
         song_info.artist = QStringLiteral("未知歌手");
@@ -59,7 +59,7 @@ namespace {
         const std::wstring nativePath = QDir::toNativeSeparators(file_path).toStdWString();
         TagLib::FileRef ref(nativePath.c_str());
 #else
-        const QByteArray nativePath = QFile::encodeName(QDir::toNativeSeparators(filePath));
+        const QByteArray nativePath = QFile::encodeName(QDir::toNativeSeparators(file_path));
         TagLib::FileRef ref(nativePath.constData());
 #endif
         if (ref.isNull()) {
@@ -116,9 +116,9 @@ namespace {
         }
 
         if (!coverBytes.isEmpty()) {
-            QPixmap pix;
-            if (pix.loadFromData(coverBytes)) {
-                song_info.cover = pix;
+            QImage cover;
+            if (cover.loadFromData(coverBytes)) {
+                song_info.cover = cover;
             } else {
                 qWarning() << "Cannot decode cover image for:" << file_path;
             }
