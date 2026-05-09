@@ -56,6 +56,7 @@ MainWindow::MainWindow(QWidget *parent)
         // 传入当前 SongPage 的全部 songs 作为 queue
         m_playback_controller->playNow(song, row, m_song_page->getSongs());
     });
+
     connect(m_player_control_bar, &PlayerControlBar::playPauseClicked, m_playback_controller,
             &PlaybackController::togglePlayPause);
     connect(m_player_control_bar, &PlayerControlBar::nextClicked, m_playback_controller,

@@ -6,6 +6,10 @@
 #include <QUrl>
 #include <QWidget>
 
+#include "../h/playercontrolbar.h"
+
+bool PlaybackController::m_is_playing = false; // 一定要加这一行
+
 PlaybackController::PlaybackController(QWidget *parent) : QObject(parent) {
     qDebug() << "PlaybackController构造完成";
     m_player = new QMediaPlayer(this);
@@ -40,6 +44,14 @@ PlaybackController::PlaybackController(QWidget *parent) : QObject(parent) {
 PlaybackController::~PlaybackController() {
     m_player->stop();
     qDebug() << "PlaybackController析构完成";
+}
+
+bool PlaybackController::get_Play_Stutus() {
+    return m_is_playing;
+}
+
+void PlaybackController::set_Play_Stutus(bool is_playing) {
+    m_is_playing = !is_playing;
 }
 
 void PlaybackController::playNow(const SongInfo &song, int index, const QVector<SongInfo> &queue) {

@@ -4,6 +4,8 @@
 
 #include "../h/playercontrolbar.h"
 
+#include "../h/playbackcontroller.h"
+
 PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     qDebug() << "PlayerControlBar构造完成";
 
@@ -73,6 +75,7 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
 
     m_play_order_btn = createButton(btn_infos[0], this);
     m_control_widget_layout->addWidget(m_play_order_btn);
+
     m_prev_btn = createButton(btn_infos[1], this);
     m_control_widget_layout->addWidget(m_prev_btn);
 
@@ -89,6 +92,7 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     m_control_widget_layout->addWidget(m_volume_btn);
 
     connect(m_play_pause_btn, &QPushButton::clicked, this, &PlayerControlBar::playPauseClicked);
+    connect(m_play_pause_btn, &QPushButton::clicked, this, &PlayerControlBar::updatePlaybackStatusIcon);
     connect(m_next_btn, &QPushButton::clicked, this, &PlayerControlBar::nextClicked);
     connect(m_prev_btn, &QPushButton::clicked, this, &PlayerControlBar::prevClicked);
     connect(m_play_list_btn, &QPushButton::clicked, this, &PlayerControlBar::playlistClicked);
@@ -106,6 +110,16 @@ void PlayerControlBar::updateSongInfo(const SongInfo &song) const {
     m_cover_btn->setIconSize(QSize(48, 48));
     m_singer_label->setText(song.artist);
     m_album_label->setText(song.album);
+}
+
+void PlayerControlBar::updatePlaybackStatusIcon() const {
+    bool is_playing = PlaybackController::get_Play_Stutus();
+    if (is_playing) {
+        m_play_pause_btn->setIcon(QIcon(":/icons/pause.svg"));
+    } else {
+        m_play_pause_btn->setIcon(QIcon(":/icons/play.svg"));
+    }
+    PlaybackController::set_Play_Stutus(is_playing);
 }
 
 QPushButton *PlayerControlBar::createButton(const BtnInfo &btn_info, QWidget *parent) {

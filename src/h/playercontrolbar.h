@@ -22,6 +22,8 @@ public:
 
     void updateSongInfo(const SongInfo &song) const;
 
+    void updatePlaybackStatusIcon() const;
+
 
 signals:
     void playPauseClicked();

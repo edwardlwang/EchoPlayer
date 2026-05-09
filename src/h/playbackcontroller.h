@@ -28,6 +28,10 @@ public:
 
     void playPrevious();
 
+    static bool get_Play_Stutus();
+
+    static void set_Play_Stutus(bool is_playing);
+
 signals :
     void currentSongChanged(const SongInfo &, int index);
 
@@ -44,6 +48,7 @@ private:
     QAudioOutput *m_audio;
     QVector<SongInfo> m_songs_queue;
     int m_current_song_index = -1;
+    static bool m_is_playing;
 };
 
 
