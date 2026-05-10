@@ -16,7 +16,6 @@ PlaybackController::PlaybackController(QWidget *parent) : QObject(parent) {
     m_audio = new QAudioOutput(this);
     m_player->setAudioOutput(m_audio);
 
-    // Forward useful signals from QMediaPlayer to UI via our own signals
     connect(m_player, &QMediaPlayer::positionChanged, this, [this](qint64 pos) {
         emit positionChanged(pos);
     });
