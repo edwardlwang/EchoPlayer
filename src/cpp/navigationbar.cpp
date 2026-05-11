@@ -8,7 +8,7 @@ NavigationBar::NavigationBar(QWidget *parent) : QWidget(parent) {
     qDebug() << "NavigationBar构造完成";
 
     this->setObjectName("navigationbar");
-    this->setFixedWidth(108);
+    this->setFixedWidth(144);
     this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
     this->setAttribute(Qt::WA_StyledBackground, true);
 
@@ -33,9 +33,17 @@ NavigationBar::NavigationBar(QWidget *parent) : QWidget(parent) {
         btn->setObjectName(item.key);
         btn->setCheckable(true);
         btn->setFlat(true);
-        btn->setFixedSize(108, 60);
+        // btn->setFixedSize(108, 60);
+        btn->setFixedHeight(60);
         btn->setIconSize(QSize(32, 32));
         btn->setIcon(QIcon(item.icon_path));
+        btn->setText(item.text);
+        btn->setStyleSheet(
+        "QPushButton {"
+                "text-align: center;"      // 文字水平居中（不控制图标位置）
+            "}"
+        );
+
         btn->setCursor(Qt::PointingHandCursor);
         if (item.key == "songs") {
             btn->setChecked(true);
