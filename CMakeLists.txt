@@ -44,6 +44,10 @@ find_package(Qt6 COMPONENTS
         REQUIRED)
 
 # -----------------------------------------------------------------------------
+# 查找 taglib 的依赖（zlib）
+# -----------------------------------------------------------------------------
+find_package(ZLIB REQUIRED)
+# -----------------------------------------------------------------------------
 # 查找 taglib（vcpkg 安装）
 # -----------------------------------------------------------------------------
 find_package(taglib CONFIG REQUIRED)
@@ -134,42 +138,4 @@ if (WIN32)
         message(WARNING "windeployqt not found; runtime launch may fail with missing Qt DLLs")
     endif ()
 
-endif ()
-
-# -----------------------------------------------------------------------------
-# Linux 部署（使用 Qt 官方部署工具）
-# -----------------------------------------------------------------------------
-if (UNIX AND NOT APPLE AND NOT WIN32)
-    # 需要 CMake 3.18+ 才能使用 qt_generate_deploy_app_script
-    if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.18)
-        # 包含部署支持模块
-        include(DeployQt6)
-
-        # 生成部署脚本（自动处理 Qt 库和 taglib 等依赖）
-        qt_generate_deploy_app_script(
-                TARGET EchoPlayer
-                OUTPUT_SCRIPT deploy_script
-                DEPLOY_TOOL_OPTIONS --no-strip  # 可选：保留调试符号
-        )
-
-        # 在安装时执行部署脚本
-        install(SCRIPT ${deploy_script})
-
-        # 可选：在构建目录也生成一个可直接运行的部署脚本（方便测试）
-        file(GENERATE OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/deploy.sh CONTENT
-                "#!/bin/bash\n${deploy_script}\necho 'Deployment complete. You can now run bin/EchoPlayer'")
-        file(CHMOD ${CMAKE_CURRENT_BINARY_DIR}/deploy.sh PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
-
-        message(STATUS "Linux deployment script generated: ${deploy_script}")
-        message(STATUS "After installing (make install), the application will be self-contained.")
-    else ()
-        message(WARNING "CMake version >= 3.18 is required for automatic Linux deployment. "
-                "You will need to manually run linuxdeployqt or ldd to collect dependencies.")
-        # 降级方案：尝试查找 linuxdeployqt
-        find_program(LINUXDEPLOYQT_EXECUTABLE linuxdeployqt)
-        if (LINUXDEPLOYQT_EXECUTABLE)
-            message(STATUS "Found linuxdeployqt, you can manually run: "
-                    "${LINUXDEPLOYQT_EXECUTABLE} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/EchoPlayer -bundle-non-qt-libs")
-        endif ()
-    endif ()
 endif ()
