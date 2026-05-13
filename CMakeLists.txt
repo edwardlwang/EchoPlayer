@@ -96,8 +96,8 @@ add_executable(EchoPlayer src/cpp/main.cpp
         src/h/commonstruct.h
         src/cpp/scanmusic.cpp
         src/h/scanmusic.h
-        src/cpp/playbackcontroller.cpp
-        src/h/playbackcontroller.h
+        src/cpp/playercontroller.cpp
+        src/h/playercontroller.h
 )
 
 # -----------------------------------------------------------------------------

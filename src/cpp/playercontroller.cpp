@@ -2,19 +2,17 @@
 // Created by edward on 2026/4/22.
 //
 
-#include "../h/playbackcontroller.h"
 #include <QUrl>
-#include <QWidget>
 
 #include "../h/playercontrolbar.h"
+#include "../h/playercontroller.h"
 
-bool PlaybackController::m_is_playing = false; // 一定要加这一行
-
-PlaybackController::PlaybackController(QWidget *parent) : QObject(parent) {
-    qDebug() << "PlaybackController构造完成";
+PlayerController::PlayerController(QWidget *parent) : QObject(parent) {
+    qDebug() << "PlayerController构造完成";
     m_player = new QMediaPlayer(this);
     m_audio = new QAudioOutput(this);
     m_player->setAudioOutput(m_audio);
+    m_current_song = {"", QImage(), "", "", "", 0}; // 当前播放的歌曲信息
 
     connect(m_player, &QMediaPlayer::positionChanged, this, [this](qint64 pos) {
         emit positionChanged(pos);
@@ -40,20 +38,35 @@ PlaybackController::PlaybackController(QWidget *parent) : QObject(parent) {
     });
 }
 
-PlaybackController::~PlaybackController() {
+PlayerController::~PlayerController() {
     m_player->stop();
-    qDebug() << "PlaybackController析构完成";
+    qDebug() << "Playerontroller析构完成";
 }
 
-bool PlaybackController::get_Play_Stutus() {
-    return m_is_playing;
+bool PlayerController::getPlayStatus() const {
+    return m_player && m_player->playbackState() == QMediaPlayer::PlayingState;
 }
 
-void PlaybackController::set_Play_Stutus(bool is_playing) {
-    m_is_playing = !is_playing;
+void PlayerController::setPlayStatus(bool is_playing) {
+    if (!m_player) {
+        return;
+    }
+    if (is_playing) {
+        m_player->play();
+    } else {
+        m_player->pause();
+    }
 }
 
-void PlaybackController::playNow(const SongInfo &song, int index, const QVector<SongInfo> &queue) {
+SongInfo PlayerController::getCurrentSong() const {
+    return m_current_song;
+}
+
+void PlayerController::setCurrentSong(const SongInfo &song) {
+    m_current_song = song;
+}
+
+void PlayerController::playNow(const SongInfo &song, int index, const QVector<SongInfo> &queue) {
     m_songs_queue = queue;
     m_current_song_index = index;
 
@@ -65,7 +78,7 @@ void PlaybackController::playNow(const SongInfo &song, int index, const QVector<
     emit playStateChanged(true);
 }
 
-void PlaybackController::togglePlayPause() const {
+void PlayerController::togglePlayPause() const {
     if (m_player->playbackState() == QMediaPlayer::PlayingState) {
         m_player->pause();
     } else {
@@ -73,7 +86,7 @@ void PlaybackController::togglePlayPause() const {
     }
 }
 
-void PlaybackController::playNext() {
+void PlayerController::playNext() {
     if (m_songs_queue.isEmpty()) {
         qDebug() << "Queue is empty, cannot play next.";
         return;
@@ -84,7 +97,7 @@ void PlaybackController::playNext() {
     playNow(next_song, m_current_song_index, m_songs_queue);
 }
 
-void PlaybackController::playPrevious() {
+void PlayerController::playPrevious() {
     if (m_songs_queue.isEmpty()) {
         qDebug() << "Queue is empty, cannot play previous.";
         return;

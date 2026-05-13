@@ -2,23 +2,22 @@
 // Created by edward on 2026/4/22.
 //
 
-#ifndef ECHONOTE_PLAYBACKCONTROLLER_H
-#define ECHONOTE_PLAYBACKCONTROLLER_H
+#ifndef ECHONOTE_PLAYERCONTROLLER_H
+#define ECHONOTE_PLAYERCONTROLLER_H
 
 #include <QMediaPlayer>
 #include <QVector>
 #include <QAudioOutput>
-#include <QDebug>
 
 #include "commonstruct.h"
 
-class PlaybackController : public QObject {
+class PlayerController : public QObject {
     Q_OBJECT
 
 public:
-    explicit PlaybackController(QWidget *parent = nullptr);
+    explicit PlayerController(QWidget *parent = nullptr);
 
-    ~PlaybackController() override;
+    ~PlayerController() override;
 
     void playNow(const SongInfo &song, int index, const QVector<SongInfo> &queue);
 
@@ -28,14 +27,18 @@ public:
 
     void playPrevious();
 
-    static bool get_Play_Stutus();
+    bool getPlayStatus() const;
 
-    static void set_Play_Stutus(bool is_playing);
+    void setPlayStatus(bool is_playing);
+
+    SongInfo getCurrentSong() const;
+
+    void setCurrentSong(const SongInfo &song);
 
 signals :
     void currentSongChanged(const SongInfo &, int index);
 
-    void playStateChanged(bool isPlaying);
+    void playStateChanged(bool is_playing);
 
     void positionChanged(qint64);
 
@@ -48,8 +51,8 @@ private:
     QAudioOutput *m_audio;
     QVector<SongInfo> m_songs_queue;
     int m_current_song_index = -1;
-    static bool m_is_playing;
+    SongInfo m_current_song;
 };
 
 
-#endif //ECHONOTE_PLAYBACKCONTROLLER_H
+#endif //ECHONOTE_PLAYERCONTROLLER_H

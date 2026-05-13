@@ -159,6 +159,11 @@ const QVector<SongInfo> &SongPage::getSongs() const {
     return m_songs;
 }
 
+void SongPage::highlightCurrentSong() {
+    // m_song_table->clearSelection();
+    // m_song_table->setSelectionBehavior(QAbstractItemView::SelectRows);
+}
+
 void SongPage::appendSongsBatch(const QVector<SongInfo> &songs) {
     for (const SongInfo &song: songs) {
         m_songs.push_back(song);

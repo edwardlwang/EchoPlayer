@@ -3,8 +3,7 @@
 //
 
 #include "../h/playercontrolbar.h"
-
-#include "../h/playbackcontroller.h"
+#include "../h/playercontroller.h"
 
 PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     qDebug() << "PlayerControlBar构造完成";
@@ -91,10 +90,11 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     m_volume_btn = createButton(btn_infos[5], this);
     m_control_widget_layout->addWidget(m_volume_btn);
 
-    // 播放/暂停按钮：触发实际的播放/暂停控制逻辑
-    connect(m_play_pause_btn, &QPushButton::clicked, this, &PlayerControlBar::playPauseClicked);
-    // 同一按钮同时也更新按钮上的图标（播放/暂停样式），保持界面状态同步
-    connect(m_play_pause_btn, &QPushButton::clicked, this, &PlayerControlBar::updatePlaybackStatusIcon);
+    // 播放/暂停按钮：触发实际的播放/暂停控制逻辑 同一按钮同时也更新按钮上的图标（播放/暂停样式），保持界面状态同步
+    connect(m_play_pause_btn, &QPushButton::clicked, this, [this]()-> void {
+        // 这里直接发出信号，由业务层处理播放/暂停逻辑
+        emit playPauseClicked();
+    });
 
     // 下一首按钮：通知业务层切换到下一首曲目
     connect(m_next_btn, &QPushButton::clicked, this, &PlayerControlBar::nextClicked);
@@ -123,14 +123,12 @@ void PlayerControlBar::updateSongInfo(const SongInfo &song) const {
     m_album_label->setText(song.album);
 }
 
-void PlayerControlBar::updatePlaybackStatusIcon() const {
-    bool is_playing = PlaybackController::get_Play_Stutus();
+void PlayerControlBar::updatePlaybackStatusIcon(bool is_playing) const {
     if (is_playing) {
         m_play_pause_btn->setIcon(QIcon(":/icons/pause.svg"));
     } else {
         m_play_pause_btn->setIcon(QIcon(":/icons/play.svg"));
     }
-    PlaybackController::set_Play_Stutus(is_playing);
 }
 
 QPushButton *PlayerControlBar::createButton(const BtnInfo &btn_info, QWidget *parent) {

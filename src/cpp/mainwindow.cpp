@@ -43,28 +43,58 @@ MainWindow::MainWindow(QWidget *parent)
     // 上方内容区占据剩余空间
     m_central_widget_layout->addWidget(m_content_widget, 1);
 
-    // 底部状态栏固定在窗口底部
+    m_player_controller = new PlayerController(this);
+    // m_player_control_bar = new PlayerControlBar(m_player_controller, m_central_widget);
     m_player_control_bar = new PlayerControlBar(m_central_widget);
+
+    // 底部状态栏固定在窗口底部
     m_central_widget_layout->addWidget(m_player_control_bar);
 
-
     m_song_page = m_content->findChild<SongPage *>("songpage");
-    m_playback_controller = new PlaybackController(this);
+    if (!m_song_page) {
+        qWarning() << "Failed to find SongPage named songpage";
+        return;
+    }
 
     // 当页面发射 songActivated，把当前队列也传给播放控制器
     connect(m_song_page, &SongPage::songActivated, this, [this](const SongInfo &song, int row) {
         // 传入当前 SongPage 的全部 songs 作为 queue
-        m_playback_controller->playNow(song, row, m_song_page->getSongs());
+        if (!m_player_controller) {
+            qWarning() << "PlayerController is null";
+            return;
+        }
+
+        if (m_player_controller->getCurrentSong().file_path == song.file_path) {
+            // 点击同一首歌，暂停播放
+            m_player_controller->togglePlayPause();
+            m_player_controller->setPlayStatus(false);
+        } else {
+            m_player_controller->setPlayStatus(true); // 直接在这里设置为正在播放，保持状态同步
+            m_player_controller->setCurrentSong(song); // 更新当前歌曲信息，保持状态同步
+            m_player_controller->playNow(song, row, m_song_page->getSongs());
+        }
     });
 
-    connect(m_player_control_bar, &PlayerControlBar::playPauseClicked, m_playback_controller,
-            &PlaybackController::togglePlayPause);
-    connect(m_player_control_bar, &PlayerControlBar::nextClicked, m_playback_controller,
-            &PlaybackController::playNext);
-    connect(m_player_control_bar, &PlayerControlBar::prevClicked, m_playback_controller,
-            &PlaybackController::playPrevious);
+    connect(m_player_control_bar, &PlayerControlBar::playPauseClicked,
+            m_player_controller, &PlayerController::togglePlayPause);
 
-    connect(m_song_page, &SongPage::songActivated, m_player_control_bar, &PlayerControlBar::updateSongInfo);
+    connect(m_player_controller, &PlayerController::playStateChanged,
+            m_player_control_bar, &PlayerControlBar::updatePlaybackStatusIcon);
+
+    connect(m_player_control_bar, &PlayerControlBar::nextClicked,
+            m_player_controller, &PlayerController::playNext);
+
+    connect(m_player_control_bar, &PlayerControlBar::prevClicked,
+            m_player_controller, &PlayerController::playPrevious);
+
+    connect(m_song_page, &SongPage::songActivated,
+            m_player_control_bar, &PlayerControlBar::updateSongInfo);
+
+    connect(m_player_controller, &PlayerController::currentSongChanged,
+            m_player_control_bar, &PlayerControlBar::updateSongInfo);
+
+    // connect(m_player_controller, &PlayerController::currentSongChanged,
+    //         m_song_page, &SongPage::m_song_table->selectRow());
 }
 
 MainWindow::~MainWindow() {

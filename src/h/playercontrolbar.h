@@ -10,6 +10,7 @@
 #include <QLabel>
 
 #include "commonstruct.h"
+#include "playercontroller.h"
 
 
 class PlayerControlBar : public QWidget {
@@ -18,11 +19,13 @@ class PlayerControlBar : public QWidget {
 public:
     explicit PlayerControlBar(QWidget *parent = nullptr);
 
+    explicit PlayerControlBar(PlayerController *player_controller, QWidget *parent = nullptr);
+
     ~PlayerControlBar() override;
 
     void updateSongInfo(const SongInfo &song) const;
 
-    void updatePlaybackStatusIcon() const;
+    void updatePlaybackStatusIcon(bool is_playing) const;
 
 
 signals:
