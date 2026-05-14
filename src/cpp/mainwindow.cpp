@@ -94,8 +94,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_player_controller, &PlayerController::currentSongChanged,
             m_player_control_bar, &PlayerControlBar::updateSongInfo);
 
-    // connect(m_player_controller, &PlayerController::currentSongChanged,
-    //         m_song_page, &SongPage::m_song_table->selectRow());
+    connect(m_player_controller, &PlayerController::currentSongChanged,
+            m_song_page, &SongPage::highlightCurrentSong);
 }
 
 MainWindow::~MainWindow() {

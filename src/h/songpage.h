@@ -29,7 +29,7 @@ public:
 
     const QVector<SongInfo> &getSongs() const;
 
-    void highlightCurrentSong();
+    void highlightCurrentSong(const SongInfo &current_song, int row);
 
 signals:
     void songActivated(const SongInfo &song, int row);
