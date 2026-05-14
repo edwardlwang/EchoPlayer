@@ -63,13 +63,14 @@ MainWindow::MainWindow(QWidget *parent)
             qWarning() << "PlayerController is null";
             return;
         }
-
         if (m_player_controller->getCurrentSong().file_path == song.file_path) {
             // 点击同一首歌，暂停播放
-            m_player_controller->togglePlayPause();
-            m_player_controller->setPlayStatus(false);
+            if (m_player_controller->getPlayer()->playbackState() == QMediaPlayer::PlayingState) {
+                m_player_controller->getPlayer()->pause();
+            } else {
+                m_player_controller->getPlayer()->play();
+            }
         } else {
-            m_player_controller->setPlayStatus(true); // 直接在这里设置为正在播放，保持状态同步
             m_player_controller->setCurrentSong(song); // 更新当前歌曲信息，保持状态同步
             m_player_controller->playNow(song, row, m_song_page->getSongs());
         }
