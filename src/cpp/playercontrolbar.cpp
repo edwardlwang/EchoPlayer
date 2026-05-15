@@ -139,7 +139,11 @@ QPushButton *PlayerControlBar::createButton(const BtnInfo &btn_info, QWidget *pa
     btn->setFlat(true);
     btn->setIcon(QIcon(btn_info.icon_path));
     btn->setCursor(Qt::PointingHandCursor);
-    btn->setStyleSheet("QPushButton { padding: 0; margin: 0px; border: none; }");
+    btn->setStyleSheet(
+        "QPushButton { padding: 0; margin: 0px; border: none; }"
+        "QPushButton:hover { background-color: grey; border-radius: 4px; }"
+        "QPushButton:pressed { background-color: darkgray; }"
+    );
     return btn;
 }
 

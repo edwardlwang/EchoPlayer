@@ -1,6 +1,3 @@
-#navigationbar {
-    background-color: blue;
-}
 #navigationbar QPushButton {
     background-color: #f7f7f7;
     border: none;
@@ -21,7 +18,6 @@
 }
 
 #playercontrolbar {
-    background-color: pink;
     border-top: 1px solid #333333;
 }
 
