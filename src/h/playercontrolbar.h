@@ -8,6 +8,7 @@
 #include <QPushButton>
 #include <QWidget>
 #include <QLabel>
+#include <qslider.h>
 
 #include "commonstruct.h"
 #include "playercontroller.h"
@@ -54,8 +55,8 @@ private:
 
     QWidget *m_song_meta_widget; // 歌曲元数据（歌手+专辑）
     QVBoxLayout *m_song_meta_layout;
+    QLabel *m_name_label;
     QLabel *m_singer_label;
-    QLabel *m_album_label;
 
     QWidget *m_lyrics_widget;
     QVBoxLayout *m_lyrics_layout;
@@ -74,6 +75,8 @@ private:
     QPushButton *m_play_list_btn;
 
     QPushButton *m_volume_btn;
+    QWidget *m_popup;
+    QSlider *m_volume_slider;
 
 
     static QPushButton *createButton(const BtnInfo &btn_info, QWidget *parent = nullptr);

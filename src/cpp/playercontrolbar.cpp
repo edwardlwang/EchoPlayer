@@ -41,11 +41,11 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     m_song_info_layout->addWidget(m_song_meta_widget);
     m_song_meta_layout = new QVBoxLayout(m_song_meta_widget);
 
-    m_singer_label = new QLabel("歌手", m_song_meta_widget);
-    m_song_meta_layout->addWidget(m_singer_label);
+    m_name_label = new QLabel("歌名", m_song_meta_widget);
+    m_song_meta_layout->addWidget(m_name_label);
 
-    m_album_label = new QLabel("专辑", m_song_meta_widget);
-    m_song_meta_layout->addWidget(m_album_label);
+    m_singer_label = new QLabel("歌手/专辑", m_song_meta_widget);
+    m_song_meta_layout->addWidget(m_singer_label);
 
     m_lyrics_widget = new QWidget(m_song_detail_widget);
     m_song_detail_layout->addWidget(m_lyrics_widget, 1);
@@ -86,9 +86,16 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
 
     m_play_list_btn = createButton(btn_infos[4], this);
     m_control_widget_layout->addWidget(m_play_list_btn);
-
     m_volume_btn = createButton(btn_infos[5], this);
     m_control_widget_layout->addWidget(m_volume_btn);
+
+    m_popup=new QWidget(this,Qt::Popup);
+
+    m_volume_slider=new QSlider(Qt::Horizontal,m_popup);
+    m_volume_slider->setRange(0, 100);
+
+    m_popup->move(m_volume_btn->mapToGlobal(QPoint(0,m_volume_btn->height())));
+    m_popup->show();
 
     // 播放/暂停按钮：触发实际的播放/暂停控制逻辑 同一按钮同时也更新按钮上的图标（播放/暂停样式），保持界面状态同步
     connect(m_play_pause_btn, &QPushButton::clicked, this, [this]()-> void {
@@ -119,8 +126,8 @@ PlayerControlBar::~PlayerControlBar() {
 void PlayerControlBar::updateSongInfo(const SongInfo &song) const {
     m_cover_btn->setIcon(QIcon(QPixmap::fromImage(song.cover)));
     m_cover_btn->setIconSize(QSize(48, 48));
+    m_name_label->setText(song.title);
     m_singer_label->setText(song.artist);
-    m_album_label->setText(song.album);
 }
 
 void PlayerControlBar::updatePlaybackStatusIcon(bool is_playing) const {
