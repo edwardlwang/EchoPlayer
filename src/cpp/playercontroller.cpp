@@ -14,6 +14,8 @@ PlayerController::PlayerController(QWidget *parent) : QObject(parent) {
     m_player->setAudioOutput(m_audio);
     m_current_song = {"", QImage(), "", "", "", 0}; // 当前播放的歌曲信息
 
+    m_audio->setVolume(0.66); // 默认音量为66%
+
     connect(m_player, &QMediaPlayer::positionChanged, this, [this](qint64 pos) {
         emit positionChanged(pos);
     });
@@ -61,6 +63,11 @@ QMediaPlayer *PlayerController::getPlayer() const {
 //         m_player->pause();
 //     }
 // }
+
+void PlayerController::setVolume(int volume) {
+    qDebug() << "Setting volume to:" << volume;
+    m_audio->setVolume(static_cast<float>(volume) / 100);
+}
 
 SongInfo PlayerController::getCurrentSong() const {
     return m_current_song;

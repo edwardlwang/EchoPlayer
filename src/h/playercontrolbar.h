@@ -28,6 +28,7 @@ public:
 
     void updatePlaybackStatusIcon(bool is_playing) const;
 
+    QSlider *getVolumeSlider() const;
 
 signals:
     void playPauseClicked();
@@ -55,8 +56,8 @@ private:
 
     QWidget *m_song_meta_widget; // 歌曲元数据（歌手+专辑）
     QVBoxLayout *m_song_meta_layout;
-    QLabel *m_name_label;
-    QLabel *m_singer_label;
+    QLabel *m_title_label;
+    QLabel *m_artist_album_label;
 
     QWidget *m_lyrics_widget;
     QVBoxLayout *m_lyrics_layout;
@@ -77,6 +78,7 @@ private:
     QPushButton *m_volume_btn;
     QWidget *m_popup;
     QSlider *m_volume_slider;
+    QVBoxLayout *m_popup_layout;
 
 
     static QPushButton *createButton(const BtnInfo &btn_info, QWidget *parent = nullptr);

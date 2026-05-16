@@ -27,15 +27,14 @@ public:
 
     void playPrevious();
 
-    // bool getPlayStatus() const;
-
-    // void setPlayStatus(bool is_playing);
-
     SongInfo getCurrentSong() const;
 
     QMediaPlayer *getPlayer() const;
 
     void setCurrentSong(const SongInfo &song);
+
+    void setVolume(int volume);
+
 
 signals :
     void currentSongChanged(const SongInfo &, int index);

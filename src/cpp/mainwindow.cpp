@@ -96,6 +96,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(m_player_controller, &PlayerController::currentSongChanged,
             m_song_page, &SongPage::highlightCurrentSong);
+
+    connect(m_player_control_bar->getVolumeSlider(), &QSlider::valueChanged,
+            m_player_controller, &PlayerController::setVolume);
 }
 
 MainWindow::~MainWindow() {
