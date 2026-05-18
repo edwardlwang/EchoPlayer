@@ -4,6 +4,7 @@
 
 #include "../h/playercontrolbar.h"
 #include "../h/playercontroller.h"
+#include <QHeaderView>
 
 PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     qDebug() << "PlayerControlBar构造完成";
@@ -83,27 +84,42 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     m_next_btn = createButton(btn_infos[3], this);
     m_control_widget_layout->addWidget(m_next_btn);
 
-    m_play_list_btn = createButton(btn_infos[4], this);
-    m_control_widget_layout->addWidget(m_play_list_btn);
+    m_playlist_btn = createButton(btn_infos[4], this);
+    m_control_widget_layout->addWidget(m_playlist_btn);
     m_volume_btn = createButton(btn_infos[5], this);
     m_control_widget_layout->addWidget(m_volume_btn);
 
-    m_popup = new QWidget(this, Qt::Popup);
-    m_popup_layout = new QVBoxLayout(m_popup);
-    m_popup_layout->setContentsMargins(5, 5, 5, 5); // 给滑块加边距，不贴死边框
+    m_volume_popup_widget = new QWidget(m_volume_btn, Qt::Popup);
+    m_volume_popup_layout = new QVBoxLayout(m_volume_popup_widget);
+    m_volume_popup_layout->setContentsMargins(5, 5, 5, 5); // 给滑块加边距，不贴死边框
+
+    m_volume_label = new QLabel("66", m_volume_popup_widget);
+    m_volume_popup_layout->addWidget(m_volume_label, 0, Qt::AlignCenter);
 
     m_volume_slider = new QSlider(Qt::Vertical);
     m_volume_slider->setRange(0, 100);
     m_volume_slider->setFixedHeight(100); // 固定高度，也可根据需求调整
     m_volume_slider->setFixedWidth(30); // 固定宽度，美观
     m_volume_slider->setValue(66); // 初始音量 50%
-    m_popup_layout->addWidget(m_volume_slider, 0, Qt::AlignCenter);
-    m_popup->adjustSize();
-    m_popup->hide();
+    m_volume_popup_layout->addWidget(m_volume_slider, 0, Qt::AlignCenter);
+
+    m_volume_popup_widget->adjustSize();
+    m_volume_popup_widget->hide();
+
+    m_playlist_popup_widget = new QWidget(m_playlist_btn, Qt::Popup);
+    m_playlist_popup_layout = new QVBoxLayout(m_playlist_popup_widget);
+    m_playlist_popup_layout->setContentsMargins(2, 2, 2, 2);
+
+    m_playlist_table = new QTableWidget(m_playlist_btn);
+    m_playlist_table->setShowGrid(false);
+    m_playlist_table->setFrameShape(QFrame::NoFrame);
+    m_playlist_table->verticalHeader()->setVisible(false);
+    m_playlist_table->horizontalHeader()->setVisible(false);
+    m_playlist_table->setColumnCount(1);
 
     connect(m_volume_btn, &QPushButton::clicked, this, [this]() {
-        if (m_popup->isVisible()) {
-            m_popup->hide();
+        if (m_volume_popup_widget->isVisible()) {
+            m_volume_popup_widget->hide();
         } else {
             // 1. 计算按钮的中心全局坐标（水平居中用）
             QPoint btn_center = m_volume_btn->mapToGlobal(m_volume_btn->rect().center());
@@ -111,14 +127,19 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
             QPoint btn_top_left = m_volume_btn->mapToGlobal(QPoint(0, 0));
 
             // 3. 正确位置：底部贴按钮顶部，水平和按钮中心对齐
-            int popup_x = btn_center.x() - m_popup->width() / 2;
-            int popup_y = btn_top_left.y() - m_popup->height();
+            int popup_x = btn_center.x() - m_volume_popup_widget->width() / 2;
+            int popup_y = btn_top_left.y() - m_volume_popup_widget->height();
 
-            m_popup->move(popup_x, popup_y - (m_control_widget->height() - m_volume_btn->height()) / 2);
-            m_popup->show();
+            m_volume_popup_widget->move(popup_x, popup_y - (m_control_widget->height() - m_volume_btn->height()) / 2);
+            m_volume_popup_widget->show();
             m_volume_slider->setFocus();
         }
     });
+
+    connect(m_volume_slider, &QSlider::valueChanged, this, [this](int value)-> void {
+        m_volume_label->setText(QString::number(value));
+    });
+
 
     // 播放/暂停按钮：触发实际的播放/暂停控制逻辑 同一按钮同时也更新按钮上的图标（播放/暂停样式），保持界面状态同步
     connect(m_play_pause_btn, &QPushButton::clicked, this, [this]()-> void {

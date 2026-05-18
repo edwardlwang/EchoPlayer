@@ -9,9 +9,9 @@
 #include <QWidget>
 #include <QLabel>
 #include <qslider.h>
+#include <QTableWidget>
 
 #include "commonstruct.h"
-#include "playercontroller.h"
 
 
 class PlayerControlBar : public QWidget {
@@ -19,8 +19,6 @@ class PlayerControlBar : public QWidget {
 
 public:
     explicit PlayerControlBar(QWidget *parent = nullptr);
-
-    explicit PlayerControlBar(PlayerController *player_controller, QWidget *parent = nullptr);
 
     ~PlayerControlBar() override;
 
@@ -73,12 +71,18 @@ private:
     QPushButton *m_prev_btn;
     QPushButton *m_play_pause_btn;
     QPushButton *m_next_btn;
-    QPushButton *m_play_list_btn;
+    QPushButton *m_playlist_btn;
 
     QPushButton *m_volume_btn;
-    QWidget *m_popup;
+    QWidget *m_volume_popup_widget;
+    QVBoxLayout *m_volume_popup_layout;
     QSlider *m_volume_slider;
-    QVBoxLayout *m_popup_layout;
+    QLabel *m_volume_label;
+
+    QWidget *m_playlist_popup_widget;
+    QVBoxLayout *m_playlist_popup_layout;
+
+    QTableWidget *m_playlist_table;
 
 
     static QPushButton *createButton(const BtnInfo &btn_info, QWidget *parent = nullptr);

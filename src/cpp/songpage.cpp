@@ -49,7 +49,7 @@ SongPage::SongPage(QWidget *parent) : QWidget(parent) {
     m_song_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_main_layout->addWidget(m_song_table);
 
-    connect(m_song_table, &QTableWidget::cellDoubleClicked, this, [this](int row, int) {
+    connect(m_song_table, &QTableWidget::cellDoubleClicked, this, [this](const int row, int) {
         if (row >= 0 && row < m_songs.size()) {
             emit songActivated(m_songs[row], row);
         }
@@ -159,7 +159,7 @@ const QVector<SongInfo> &SongPage::getSongs() const {
     return m_songs;
 }
 
-void SongPage::highlightCurrentSong(const SongInfo &current_song, int row) {
+void SongPage::highlightCurrentSong(const SongInfo &current_song, int row) const {
     m_song_table->selectRow(row);
 }
 
