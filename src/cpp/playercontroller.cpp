@@ -49,21 +49,6 @@ QMediaPlayer *PlayerController::getPlayer() const {
     return m_player;
 }
 
-// bool PlayerController::getPlayStatus() const {
-//     return m_player && m_player->playbackState() == QMediaPlayer::PlayingState;
-// }
-//
-// void PlayerController::setPlayStatus(bool is_playing) {
-//     if (!m_player) {
-//         return;
-//     }
-//     if (is_playing) {
-//         m_player->play();
-//     } else {
-//         m_player->pause();
-//     }
-// }
-
 void PlayerController::setVolume(int volume) {
     qDebug() << "Setting volume to:" << volume;
     m_audio->setVolume(static_cast<float>(volume) / 100);

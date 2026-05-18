@@ -89,7 +89,7 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     m_volume_btn = createButton(btn_infos[5], this);
     m_control_widget_layout->addWidget(m_volume_btn);
 
-    m_volume_popup_widget = new QWidget(m_volume_btn, Qt::Popup);
+    m_volume_popup_widget = new QWidget(window(), Qt::Popup);
     m_volume_popup_layout = new QVBoxLayout(m_volume_popup_widget);
     m_volume_popup_layout->setContentsMargins(5, 5, 5, 5); // 给滑块加边距，不贴死边框
 
@@ -106,11 +106,13 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     m_volume_popup_widget->adjustSize();
     m_volume_popup_widget->hide();
 
-    m_playlist_popup_widget = new QWidget(m_playlist_btn, Qt::Popup);
+    m_playlist_popup_widget = new QWidget(window(), Qt::Popup);
+    m_playlist_popup_widget->setFixedSize(200, 300); // 固定大小，也可根据需求调整
     m_playlist_popup_layout = new QVBoxLayout(m_playlist_popup_widget);
     m_playlist_popup_layout->setContentsMargins(2, 2, 2, 2);
 
-    m_playlist_table = new QTableWidget(m_playlist_btn);
+
+    m_playlist_table = new QTableWidget(m_playlist_popup_widget);
     m_playlist_table->setShowGrid(false);
     m_playlist_table->setFrameShape(QFrame::NoFrame);
     m_playlist_table->verticalHeader()->setVisible(false);
@@ -133,6 +135,25 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
             m_volume_popup_widget->move(popup_x, popup_y - (m_control_widget->height() - m_volume_btn->height()) / 2);
             m_volume_popup_widget->show();
             m_volume_slider->setFocus();
+        }
+    });
+
+    connect(m_playlist_btn, &QPushButton::clicked, this, [this]() {
+        if (m_playlist_popup_widget->isVisible()) {
+            m_playlist_popup_widget->hide();
+        } else {
+            // 1. 计算按钮的中心全局坐标（水平居中用）
+            QPoint btn_center = m_playlist_btn->mapToGlobal(m_playlist_btn->rect().center());
+            // 2. 计算按钮的顶部全局坐标（垂直对齐用）
+            QPoint btn_top_left = m_playlist_btn->mapToGlobal(QPoint(0, 0));
+
+            // 3. 正确位置：底部贴按钮顶部，水平和按钮中心对齐
+            int popup_x = btn_center.x() - m_playlist_popup_widget->width() / 2;
+            int popup_y = btn_top_left.y() - m_playlist_popup_widget->height();
+
+            m_playlist_popup_widget->move(
+                popup_x, popup_y - (m_control_widget->height() - m_playlist_btn->height()) / 2);
+            m_playlist_popup_widget->show();
         }
     });
 

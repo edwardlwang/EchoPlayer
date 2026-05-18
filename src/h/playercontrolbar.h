@@ -81,7 +81,6 @@ private:
 
     QWidget *m_playlist_popup_widget;
     QVBoxLayout *m_playlist_popup_layout;
-
     QTableWidget *m_playlist_table;
 
 
