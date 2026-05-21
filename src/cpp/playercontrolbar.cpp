@@ -113,11 +113,12 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
 
 
     m_playlist_table = new QTableWidget(m_playlist_popup_widget);
-    m_playlist_table->setShowGrid(false);
-    m_playlist_table->setFrameShape(QFrame::NoFrame);
-    m_playlist_table->verticalHeader()->setVisible(false);
-    m_playlist_table->horizontalHeader()->setVisible(false);
-    m_playlist_table->setColumnCount(1);
+    m_playlist_popup_layout->addWidget(m_playlist_table);
+    // m_playlist_table->setShowGrid(false);
+    // m_playlist_table->setFrameShape(QFrame::NoFrame);
+    // m_playlist_table->verticalHeader()->setVisible(false);
+    // m_playlist_table->horizontalHeader()->setVisible(false);
+    // m_playlist_table->setColumnCount(1);
 
     connect(m_volume_btn, &QPushButton::clicked, this, [this]() {
         if (m_volume_popup_widget->isVisible()) {
@@ -136,6 +137,10 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
             m_volume_popup_widget->show();
             m_volume_slider->setFocus();
         }
+    });
+
+    connect(m_volume_slider, &QSlider::valueChanged, this, [this](int value)-> void {
+        m_volume_label->setText(QString::number(value));
     });
 
     connect(m_playlist_btn, &QPushButton::clicked, this, [this]() {
@@ -157,10 +162,6 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
         }
     });
 
-    connect(m_volume_slider, &QSlider::valueChanged, this, [this](int value)-> void {
-        m_volume_label->setText(QString::number(value));
-    });
-
 
     // 播放/暂停按钮：触发实际的播放/暂停控制逻辑 同一按钮同时也更新按钮上的图标（播放/暂停样式），保持界面状态同步
     connect(m_play_pause_btn, &QPushButton::clicked, this, [this]()-> void {
@@ -178,9 +179,6 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
 
     // 播放顺序按钮：切换播放模式（如单曲循环、列表循环、随机播放等）
     // connect(m_play_order_btn, &QPushButton::clicked, this, &PlayerControlBar::playOrderClicked);
-
-    // 音量按钮：调出音量控制（如弹出滑块、静音切换等）
-    // connect(m_volume_btn, &QPushButton::clicked, this, &PlayerControlBar::volumeClicked);
 }
 
 
@@ -189,13 +187,17 @@ PlayerControlBar::~PlayerControlBar() {
 }
 
 void PlayerControlBar::updateSongInfo(const SongInfo &song) const {
-    m_cover_btn->setIcon(QIcon(QPixmap::fromImage(song.cover)));
+    if (song.cover.isNull()) {
+        m_cover_btn->setIcon(QIcon(":/imgs/album.png"));
+    } else {
+        m_cover_btn->setIcon(QIcon(QPixmap::fromImage(song.cover)));
+    }
     m_cover_btn->setIconSize(QSize(48, 48));
     m_title_label->setText(song.title);
     m_artist_album_label->setText(song.artist + " - " + song.album);
 }
 
-void PlayerControlBar::updatePlaybackStatusIcon(bool is_playing) const {
+void PlayerControlBar::updatePlayerStatusIcon(bool is_playing) const {
     if (is_playing) {
         m_play_pause_btn->setIcon(QIcon(":/icons/pause.svg"));
     } else {

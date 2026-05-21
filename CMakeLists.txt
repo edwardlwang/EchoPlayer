@@ -107,7 +107,7 @@ target_link_libraries(EchoPlayer PRIVATE
         Qt6::Core
         Qt6::Gui
         Qt6::Widgets
-        Qt::Multimedia
+        Qt6::Multimedia
         Qt6::MultimediaWidgets
         Qt6::Svg
         ${TAGLIB_LINK_TARGET}

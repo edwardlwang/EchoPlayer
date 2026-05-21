@@ -24,7 +24,7 @@ public:
 
     void updateSongInfo(const SongInfo &song) const;
 
-    void updatePlaybackStatusIcon(bool is_playing) const;
+    void updatePlayerStatusIcon(bool is_playing) const;
 
     QSlider *getVolumeSlider() const;
 

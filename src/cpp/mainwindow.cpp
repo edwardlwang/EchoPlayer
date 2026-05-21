@@ -80,7 +80,7 @@ MainWindow::MainWindow(QWidget *parent)
             m_player_controller, &PlayerController::togglePlayPause);
 
     connect(m_player_controller, &PlayerController::playStateChanged,
-            m_player_control_bar, &PlayerControlBar::updatePlaybackStatusIcon);
+            m_player_control_bar, &PlayerControlBar::updatePlayerStatusIcon);
 
     connect(m_player_control_bar, &PlayerControlBar::nextClicked,
             m_player_controller, &PlayerController::playNext);
