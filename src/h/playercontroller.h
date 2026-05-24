@@ -21,19 +21,15 @@ public:
 
     void playNow(const SongInfo &song, int index, const QVector<SongInfo> &queue);
 
-    void togglePlayPause() const;
+    void togglePlayPause();
 
     void playNext();
 
     void playPrevious();
 
-    SongInfo getCurrentSong() const;
-
-    QMediaPlayer *getPlayer() const;
-
-    void setCurrentSong(const SongInfo &song);
-
     void setVolume(int volume);
+
+    void toggleOrPlaySong(const SongInfo &song, int row, const QVector<SongInfo> &queue);
 
 
 signals :
@@ -52,7 +48,6 @@ private:
     QAudioOutput *m_audio;
     QVector<SongInfo> m_songs_queue;
     int m_current_song_index = -1;
-    SongInfo m_current_song;
 };
 
 

@@ -103,8 +103,7 @@ SongPage::~SongPage() {
 }
 
 void SongPage::addSong(const QImage &cover, const QString &title, const QString &artist, const QString &album,
-                       const int &duration_sec)
-const {
+                       const int &duration_sec) {
     const int row = m_song_table->rowCount();
     m_song_table->insertRow(row);
 

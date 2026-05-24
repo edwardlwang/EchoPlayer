@@ -12,7 +12,6 @@ PlayerController::PlayerController(QWidget *parent) : QObject(parent) {
     m_player = new QMediaPlayer(this);
     m_audio = new QAudioOutput(this);
     m_player->setAudioOutput(m_audio);
-    m_current_song = {"", QImage(), "", "", "", 0}; // 当前播放的歌曲信息
 
     m_audio->setVolume(0.66); // 默认音量为66%
 
@@ -45,21 +44,23 @@ PlayerController::~PlayerController() {
     qDebug() << "Playerontroller析构完成";
 }
 
-QMediaPlayer *PlayerController::getPlayer() const {
-    return m_player;
+void PlayerController::toggleOrPlaySong(const SongInfo &song, int row, const QVector<SongInfo> &queue) {
+    // 防止空指针崩溃
+    if (!m_player) {
+        return;
+    }
+    // 同一首：直接切换播放/暂停
+    if (song.file_path == m_player->source().toLocalFile()) {
+        this->togglePlayPause();
+    } else {
+        // 不同歌曲：统一交给 playNow 处理（包含更新队列、索引和 current song）
+        playNow(song, row, queue);
+    }
 }
 
 void PlayerController::setVolume(int volume) {
     qDebug() << "Setting volume to:" << volume;
     m_audio->setVolume(static_cast<float>(volume) / 100);
-}
-
-SongInfo PlayerController::getCurrentSong() const {
-    return m_current_song;
-}
-
-void PlayerController::setCurrentSong(const SongInfo &song) {
-    m_current_song = song;
 }
 
 void PlayerController::playNow(const SongInfo &song, int index, const QVector<SongInfo> &queue) {
@@ -71,10 +72,9 @@ void PlayerController::playNow(const SongInfo &song, int index, const QVector<So
     m_player->play();
 
     emit currentSongChanged(song, index);
-    emit playStateChanged(true);
 }
 
-void PlayerController::togglePlayPause() const {
+void PlayerController::togglePlayPause() {
     if (m_player->playbackState() == QMediaPlayer::PlayingState) {
         m_player->pause();
     } else {
