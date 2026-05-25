@@ -8,7 +8,7 @@ int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
     QCoreApplication::setApplicationName("EchoPlayer");
     QCoreApplication::setOrganizationName("WIT");
-    QCoreApplication::setApplicationVersion("0.0.1");
+    QCoreApplication::setApplicationVersion("0.0.0");
 
     if (QFile f(":/styles/app.qss"); f.open(QIODevice::ReadOnly | QIODevice::Text)) {
         a.setStyleSheet(QString::fromUtf8(f.readAll()));
