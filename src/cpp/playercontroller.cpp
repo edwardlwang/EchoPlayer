@@ -65,13 +65,26 @@ void PlayerController::setVolume(int volume) {
 
 void PlayerController::playNow(const SongInfo &song, int index, const QVector<SongInfo> &queue) {
     m_songs_queue = queue;
-    m_current_song_index = index;
 
-    qDebug() << "Playing now:" << song.file_path;
-    m_player->setSource(QUrl::fromLocalFile(song.file_path));
+    if (m_songs_queue.isEmpty()) {
+        m_current_song_index = -1;
+        qWarning() << "Play queue is empty; ignoring playNow.";
+        return;
+    }
+
+    if (index < 0 || index >= m_songs_queue.size()) {
+        qWarning() << "Invalid song index:" << index << ", clamping to 0.";
+        m_current_song_index = 0;
+    } else {
+        m_current_song_index = index;
+    }
+
+    const SongInfo &current_song = m_songs_queue[m_current_song_index];
+    qDebug() << "Playing now:" << current_song.file_path;
+    m_player->setSource(QUrl::fromLocalFile(current_song.file_path));
     m_player->play();
 
-    emit currentSongChanged(song, index);
+    emit currentSongChanged(current_song, m_current_song_index);
 }
 
 void PlayerController::togglePlayPause() {
@@ -103,5 +116,3 @@ void PlayerController::playPrevious() {
     const SongInfo &prev_song = m_songs_queue[m_current_song_index];
     playNow(prev_song, m_current_song_index, m_songs_queue);
 }
-
-

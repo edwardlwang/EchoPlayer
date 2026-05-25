@@ -159,6 +159,10 @@ const QVector<SongInfo> &SongPage::getSongs() const {
 }
 
 void SongPage::highlightCurrentSong(const SongInfo &current_song, int row) const {
+    if (row < 0 || row >= m_song_table->rowCount()) {
+        qWarning() << "Highlight row out of range:" << row;
+        return;
+    }
     m_song_table->selectRow(row);
 }
 
