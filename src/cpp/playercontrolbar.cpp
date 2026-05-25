@@ -89,7 +89,7 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     m_volume_btn = createButton(btn_infos[5], this);
     m_control_widget_layout->addWidget(m_volume_btn);
 
-    m_volume_popup_widget = new QWidget(window(), Qt::Popup);
+    m_volume_popup_widget = new QWidget(this, Qt::Popup);
     m_volume_popup_layout = new QVBoxLayout(m_volume_popup_widget);
     m_volume_popup_layout->setContentsMargins(5, 5, 5, 5); // 给滑块加边距，不贴死边框
 
@@ -106,7 +106,7 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     m_volume_popup_widget->adjustSize();
     m_volume_popup_widget->hide();
 
-    m_playlist_popup_widget = new QWidget(window(), Qt::Popup);
+    m_playlist_popup_widget = new QWidget(this, Qt::Popup);
     m_playlist_popup_widget->setFixedSize(200, 300); // 固定大小，也可根据需求调整
     m_playlist_popup_layout = new QVBoxLayout(m_playlist_popup_widget);
     m_playlist_popup_layout->setContentsMargins(2, 2, 2, 2);
