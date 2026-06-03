@@ -23,6 +23,7 @@ public:
     ~PlayerControlBar() override;
 
     void updateSongInfo(const SongInfo &song) const;
+    void updatePlaylist(const QVector<SongInfo> &queue, int currentIndex);
 
     void updatePlayerStatusIcon(bool is_playing) const;
 

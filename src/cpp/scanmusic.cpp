@@ -54,6 +54,10 @@ namespace {
 
         meta_data_ok = false;
 
+        bool hasTagData = false;
+        bool hasCover = false;
+        bool hasProps = false;
+
 #ifdef Q_OS_WIN
         // Use UTF-16 path on Windows to avoid lossy local-8bit conversion.
         const std::wstring nativePath = QDir::toNativeSeparators(file_path).toStdWString();
@@ -67,21 +71,21 @@ namespace {
         }
 
         if (TagLib::Tag *tag = ref.tag()) {
-            // const QPixmap cover =
-
-
             const QString title = fromTagLibToString(tag->title());
             const QString artist = fromTagLibToString(tag->artist());
             const QString album = fromTagLibToString(tag->album());
 
             if (!title.isEmpty()) {
                 song_info.title = title;
+                hasTagData = true;
             }
             if (!artist.isEmpty()) {
                 song_info.artist = artist;
+                hasTagData = true;
             }
             if (!album.isEmpty()) {
                 song_info.album = album;
+                hasTagData = true;
             }
         }
 
@@ -119,17 +123,18 @@ namespace {
             QImage cover;
             if (cover.loadFromData(coverBytes)) {
                 song_info.cover = cover;
+                hasCover = true;
             } else {
                 qWarning() << "Cannot decode cover image for:" << file_path;
             }
         }
-        // coverBytes 为空时，song_info.cover 保持默认的 album.png
 
         if (TagLib::AudioProperties *props = ref.audioProperties()) {
             song_info.duration_sec = props->lengthInSeconds();
+            hasProps = true;
         }
 
-        meta_data_ok = true;
+        meta_data_ok = hasTagData || hasCover || hasProps;
         return song_info;
     }
 
@@ -308,6 +313,7 @@ void ScanMusic::ScannerService::runWorker(ScanOptions options) {
                 const auto itCache = m_cache.constFind(filePath);
                 if (itCache != m_cache.constEnd() && itCache->sig == sig) {
                     song = itCache->song;
+                    metadataOk = itCache->metadataOk;
                     cacheHit = true;
                 }
             }
@@ -315,10 +321,7 @@ void ScanMusic::ScannerService::runWorker(ScanOptions options) {
             if (!cacheHit) {
                 song = readOneFile(filePath, metadataOk);
                 QMutexLocker locker(&m_cacheMutex);
-                m_cache.insert(filePath, CachedEntry{sig, song});
-            } else {
-                // 命中缓存时，认为之前已完成元数据解析。
-                metadataOk = true;
+                m_cache.insert(filePath, CachedEntry{sig, song, metadataOk});
             }
         } else {
             song = readOneFile(filePath, metadataOk);

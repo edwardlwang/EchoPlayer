@@ -92,6 +92,7 @@ namespace ScanMusic {
         struct CachedEntry {
             FileSignature sig;
             SongInfo song;
+            bool metadataOk = false;
         };
 
         // 线程函数：真正执行扫描

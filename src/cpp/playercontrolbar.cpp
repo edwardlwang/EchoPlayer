@@ -5,6 +5,7 @@
 #include "../h/playercontrolbar.h"
 #include "../h/playercontroller.h"
 #include <QHeaderView>
+#include <QFileInfo>
 
 PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     qDebug() << "PlayerControlBar构造完成";
@@ -42,9 +43,11 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     m_song_meta_layout = new QVBoxLayout(m_song_meta_widget);
 
     m_title_label = new QLabel("歌名", m_song_meta_widget);
+    m_title_label->setFixedWidth(125);
     m_song_meta_layout->addWidget(m_title_label);
 
     m_artist_album_label = new QLabel("歌手/专辑", m_song_meta_widget);
+    m_artist_album_label->setFixedWidth(125);
     m_song_meta_layout->addWidget(m_artist_album_label);
 
     m_lyrics_widget = new QWidget(m_song_detail_widget);
@@ -114,11 +117,20 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
 
     m_playlist_table = new QTableWidget(m_playlist_popup_widget);
     m_playlist_popup_layout->addWidget(m_playlist_table);
-    // m_playlist_table->setShowGrid(false);
-    // m_playlist_table->setFrameShape(QFrame::NoFrame);
-    // m_playlist_table->verticalHeader()->setVisible(false);
-    // m_playlist_table->horizontalHeader()->setVisible(false);
-    // m_playlist_table->setColumnCount(1);
+    m_playlist_table->setShowGrid(false);
+    m_playlist_table->setFrameShape(QFrame::NoFrame);
+    m_playlist_table->verticalHeader()->setVisible(false);
+    m_playlist_table->horizontalHeader()->setVisible(false);
+    m_playlist_table->setColumnCount(2);
+    m_playlist_table->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_playlist_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    auto *playlist_header = m_playlist_table->horizontalHeader();
+    playlist_header->setStretchLastSection(false);
+
+    m_playlist_table->setColumnWidth(0, 125);
+    m_playlist_table->setColumnWidth(1, 75);
+
+    m_playlist_table->verticalHeader()->setDefaultSectionSize(28);
 
     connect(m_volume_btn, &QPushButton::clicked, this, [this]() {
         if (m_volume_popup_widget->isVisible()) {
@@ -223,4 +235,42 @@ QPushButton *PlayerControlBar::createButton(const BtnInfo &btn_info, QWidget *pa
 
 QSlider *PlayerControlBar::getVolumeSlider() const {
     return m_volume_slider;
+}
+
+void PlayerControlBar::updatePlaylist(const QVector<SongInfo> &queue, int currentIndex) {
+    m_playlist_table->setRowCount(0);
+
+    for (int i = 0; i < queue.size(); ++i) {
+        const SongInfo &song = queue[i];
+        const int row = m_playlist_table->rowCount();
+        m_playlist_table->insertRow(row);
+
+        QString title = song.title.trimmed();
+        if (title.isEmpty()) {
+            title = QFileInfo(song.file_path).completeBaseName();
+        }
+        const QString artist = song.artist.trimmed().isEmpty() ? "未知歌手" : song.artist;
+
+        // const int min = song.duration_sec / 60;
+        // const int sec = song.duration_sec % 60;
+        // const QString duration = QString("%1:%2")
+        //         .arg(min, 2, 10, QChar('0'))
+        //         .arg(sec, 2, 10, QChar('0'));
+
+        auto *title_item = new QTableWidgetItem(title);
+        auto *artist_item = new QTableWidgetItem(artist);
+        // auto *duration_item = new QTableWidgetItem(duration);
+
+        title_item->setToolTip(song.file_path);
+        m_playlist_table->setItem(row, 0, title_item);
+        m_playlist_table->setItem(row, 1, artist_item);
+        // m_playlist_table->setItem(row, 2, duration_item);
+    }
+
+    if (currentIndex >= 0 && currentIndex < m_playlist_table->rowCount()) {
+        m_playlist_table->selectRow(currentIndex);
+        if (auto *item = m_playlist_table->item(currentIndex, 0)) {
+            m_playlist_table->scrollToItem(item, QAbstractItemView::PositionAtCenter);
+        }
+    }
 }

@@ -34,6 +34,7 @@ public:
 
 signals :
     void currentSongChanged(const SongInfo &, int index);
+    void playlistChanged(const QVector<SongInfo> &queue, int currentIndex);
 
     void playStateChanged(bool is_playing);
 

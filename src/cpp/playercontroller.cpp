@@ -69,6 +69,7 @@ void PlayerController::playNow(const SongInfo &song, int index, const QVector<So
     if (m_songs_queue.isEmpty()) {
         m_current_song_index = -1;
         qWarning() << "Play queue is empty; ignoring playNow.";
+        emit playlistChanged(m_songs_queue, m_current_song_index);
         return;
     }
 
@@ -85,6 +86,7 @@ void PlayerController::playNow(const SongInfo &song, int index, const QVector<So
     m_player->play();
 
     emit currentSongChanged(current_song, m_current_song_index);
+    emit playlistChanged(m_songs_queue, m_current_song_index);
 }
 
 void PlayerController::togglePlayPause() {
