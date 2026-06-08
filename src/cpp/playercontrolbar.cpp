@@ -174,6 +174,14 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
         }
     });
 
+    connect(m_playlist_table, &QTableWidget::cellDoubleClicked, this,
+            [this](SongInfo song, int row, QVector<SongInfo> songs) {
+                if (row >= 0 && row < m_playlist_table->rowCount()) {
+                    emit playlistSongActivated(song, row, songs);
+                    m_playlist_popup_widget->hide();
+                }
+            });
+
 
     // 播放/暂停按钮：触发实际的播放/暂停控制逻辑 同一按钮同时也更新按钮上的图标（播放/暂停样式），保持界面状态同步
     connect(m_play_pause_btn, &QPushButton::clicked, this, [this]()-> void {
@@ -185,9 +193,6 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     connect(m_next_btn, &QPushButton::clicked, this, &PlayerControlBar::nextClicked);
     // 上一首按钮：通知业务层切换到上一首曲目
     connect(m_prev_btn, &QPushButton::clicked, this, &PlayerControlBar::prevClicked);
-
-    // 播放列表按钮：打开/关闭或显示播放列表界面
-    // connect(m_play_list_btn, &QPushButton::clicked, this, &PlayerControlBar::playlistClicked);
 
     // 播放顺序按钮：切换播放模式（如单曲循环、列表循环、随机播放等）
     // connect(m_play_order_btn, &QPushButton::clicked, this, &PlayerControlBar::playOrderClicked);

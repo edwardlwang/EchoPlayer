@@ -86,6 +86,9 @@ MainWindow::MainWindow(QWidget *parent)
         connect(m_player_controller, &PlayerController::playlistChanged,
                 m_player_control_bar, &PlayerControlBar::updatePlaylist);
 
+        connect(m_player_control_bar, &PlayerControlBar::playlistSongActivated,
+                m_player_controller, &PlayerController::playNow);
+
         connect(m_player_control_bar->getVolumeSlider(), &QSlider::valueChanged,
                 m_player_controller, &PlayerController::setVolume);
 }
