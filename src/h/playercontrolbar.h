@@ -39,7 +39,7 @@ signals:
 
     void playOrderClicked();
 
-    void playlistSongActivated(SongInfo, int row, QVector<SongInfo>);
+    void playlistSongActivated(int);
 
     void volumeClicked();
 

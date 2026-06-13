@@ -175,9 +175,9 @@ PlayerControlBar::PlayerControlBar(QWidget *parent) : QWidget(parent) {
     });
 
     connect(m_playlist_table, &QTableWidget::cellDoubleClicked, this,
-            [this](SongInfo song, int row, QVector<SongInfo> songs) {
+            [this](int row) {
                 if (row >= 0 && row < m_playlist_table->rowCount()) {
-                    emit playlistSongActivated(song, row, songs);
+                    emit playlistSongActivated(row);
                     m_playlist_popup_widget->hide();
                 }
             });

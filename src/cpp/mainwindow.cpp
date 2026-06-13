@@ -87,7 +87,15 @@ MainWindow::MainWindow(QWidget *parent)
                 m_player_control_bar, &PlayerControlBar::updatePlaylist);
 
         connect(m_player_control_bar, &PlayerControlBar::playlistSongActivated,
-                m_player_controller, &PlayerController::playNow);
+                m_player_controller, [this](int row) {
+                        if (!m_player_controller || !m_song_page) {
+                                return;
+                        }
+                        const QVector<SongInfo> &queue = m_song_page->getSongs();
+                        if (row >= 0 && row < queue.size()) {
+                                m_player_controller->playNow(queue[row], row, queue);
+                        }
+                });
 
         connect(m_player_control_bar->getVolumeSlider(), &QSlider::valueChanged,
                 m_player_controller, &PlayerController::setVolume);
