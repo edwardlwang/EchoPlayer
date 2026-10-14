@@ -14,7 +14,7 @@ set(CMAKE_AUTOUIC ON)
 # -----------------------------------------------------------------------------
 if (WIN32)
     # 将用户目录路径转换为 CMake 格式（正斜杠）
-    file(TO_CMAKE_PATH "$ENV{USERPROFILE}/Programs/Qt/6.8.3/msvc2022_64" QT_DEFAULT_PATH)
+    file(TO_CMAKE_PATH "$ENV{USERPROFILE}/Programs/Qt/6.8.3/mingw_64" QT_DEFAULT_PATH)
 elseif (UNIX AND NOT APPLE)
     file(TO_CMAKE_PATH "$ENV{HOME}/Programs/Qt/6.8.3/gcc_64" QT_DEFAULT_PATH)
 endif ()
@@ -29,7 +29,6 @@ endif ()
 
 # 可选：打印最终的前缀路径，便于调试
 message(STATUS "CMAKE_PREFIX_PATH = ${CMAKE_PREFIX_PATH}")
-
 
 # -----------------------------------------------------------------------------
 # 查找 Qt6 组件

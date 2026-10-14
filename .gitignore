@@ -1,56 +1,112 @@
-# C++ objects and libs
-*.slo
-*.lo
+# ===== 构建产物 =====
+build/
+build-*/
+out/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+CTestTestfile.cmake
+install_manifest.txt
+compile_commands.json
+
+# vcpkg 安装产物（由 manifest 自动生成，不提交）
+vcpkg_installed/
+vcpkg-manifest-install.log
+
+# ===== C/C++ 编译产物 =====
 *.o
+*.obj
+*.lo
+*.slo
 *.a
+*.lib
 *.la
 *.lai
 *.so
 *.so.*
-*.dll
 *.dylib
+*.dll
+*.exe
+*.pdb
+*.ilk
+*.exp
+*.idb
 
-.idea/
+# MinGW / MSVC 中间文件
+*.gcno
+*.gcda
+*.gcov
 
-# Qt-es
-object_script.*.Release
-object_script.*.Debug
+# ===== Qt 相关 =====
+# moc / uic / rcc 自动生成
+moc_*.cpp
+moc_*.h
+moc_predefs.h
+ui_*.h
+qrc_*.cpp
 *_plugin_import.cpp
-/.qmake.cache
-/.qmake.stash
+*.moc
+
+# qmake（如果以后用到）
+.qmake.cache
+.qmake.stash
 *.pro.user
 *.pro.user.*
 *.qbs.user
 *.qbs.user.*
-*.moc
-moc_*.cpp
-moc_*.h
-qrc_*.cpp
-ui_*.h
 *.qmlc
 *.jsc
-Makefile*
-*build-*
 *.qm
 *.prl
 
-# Qt unit tests
-target_wrapper.*
-
-# QtCreator
+# Qt Creator
 *.autosave
-
-# QtCreator Qml
 *.qmlproject.user
 *.qmlproject.user.*
-
-# QtCreator CMake
 CMakeLists.txt.user*
-
-# QtCreator 4.8< compilation database
-compile_commands.json
-
-# QtCreator local machine specific files for imported projects
 *creator.user*
-
 *_qmlcache.qrc
+
+# ===== IDE / 编辑器 =====
+# VS Code：只忽略本机配置，保留共享的 launch/tasks/settings/extensions
+.vscode/*
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/c_cpp_properties.json
+
+# CLion / IDEA
+.idea/
+*.iml
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.opendb
+
+# ===== 操作系统 =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== 日志 / 临时文件 =====
+*.log
+*.tmp
+*.bak
+*.orig
+*.rej
+*~
+
+# ===== 打包 / 发布 =====
+dist/
+release/
+installer/
+*.zip
+*.7z
+*.tar.gz

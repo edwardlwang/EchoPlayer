@@ -1,0 +1,23 @@
+{
+    "cmake.cmakePath": "C:/Users/edward/Programs/Qt/Tools/CMake_64/bin/cmake.exe",
+    "cmake.generator": "MinGW Makefiles",
+    "cmake.makePath": "C:/Users/edward/Programs/Qt/Tools/mingw1310_64/bin/mingw32-make.exe",
+
+    "cmake.configureSettings": {
+        "CMAKE_PREFIX_PATH": "C:/Users/edward/Programs/Qt/6.8.3/mingw_64",
+        "CMAKE_TOOLCHAIN_FILE": "D:/Programs/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "VCPKG_TARGET_TRIPLET": "x64-mingw-dynamic",
+        "VCPKG_HOST_TRIPLET": "x64-mingw-dynamic",
+        "VCPKG_APPLOCAL_DEPS": "ON",
+        "VCPKG_PREFER_SYSTEM_LIBS": "OFF",
+        "VCPKG_MANIFEST_MODE": "ON"
+    },
+
+    "vcpkg.general.enable": false,
+    "vcpkg.target.hostTriplet": "x64-mingw-dynamic",
+    "vcpkg.target.defaultTriplet": "x64-mingw-dynamic",
+    "vcpkg.target.useStaticLib": false,
+    "vcpkg.target.installDependencies": true,
+    "vcpkg.target.preferSystemLibs": false,
+    "vcpkg.target.useManifest": true
+}
